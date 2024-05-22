@@ -1,0 +1,23 @@
+<?php $product = $block->getProduct(); ?>
+<?php if ($product->getData('enable_cpwd') == 3): ?>
+<a class="measurements-link hidden-xs" href="#" title="<?= __('Measurements & Dimensions') ?>"><?= __('Measurements & Dimensions') ?></a>
+<script>
+    require([
+        'jquery',
+        'domReady!'
+    ], function ($) {
+        // Scroll to product table
+        $(".measurements-link").click(function() {
+            if ($("#bss-ptd-table").length === 0) {
+                return false;
+            }
+
+            $('html, body').animate({
+                scrollTop: $("#bss-ptd-table").offset().top - 180
+            }, 1000);
+
+            return false;
+        });
+    });
+</script>
+<?php endif; ?>

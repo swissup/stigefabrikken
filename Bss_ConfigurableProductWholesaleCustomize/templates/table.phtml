@@ -1,0 +1,162 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category  BSS
+ * @package   Bss_ConfigurableProductWholesale
+ * @author    Extension Team
+ * @copyright Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+?>
+
+<?php
+    $_product    = $block->getProduct();
+    $_attributes = $block->decorateArray($block->getAllowAttributes());
+    $_helper = $_helper = $block->getHelperWD();
+    $tableData = $block->getJsonConfigTable();
+    $childInfo = $block->getJsonChildInfo();
+    $iconPath = $block->getIconUrl();
+?>
+<?php if ($_product->isSaleable() && !empty($_attributes)) :?>
+    <?php
+        $i = 1;
+        $count = count($_attributes);
+    ?>
+    <div class="custom-table-wholesale-cf">
+        <h3 class="measurements-title visible-xs-block"><?= __('Measurements & Dimensions') ?></h3>
+        <div id="bssMyModel">
+            <div id="bssZoomDiv">
+                <img class="bssImagesModel bssImagesModelAlt" alt="" src="">
+            </div>
+        </div>
+        <div class="bss-ptd-wrapper">
+            <table id="bss-ptd-table" class="bss-hidden">
+                <thead>
+                    <tr>
+                        <th class="option-images"></th>
+                        <?php if ($_helper->getDisplayAttribute('sku')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('sku');?>>
+                                <?php /* @noEscape */ echo __('SKU');?>
+                            </th>
+                        <?php endif;?>
+                        <th><?php /* @noEscape */ echo $tableData['label'];?></th>
+                        <?php if ($_helper->getDisplayAttribute('availability')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('availability');?>>
+                                <?php /* @noEscape */ echo __('Availability');?>
+                            </th>
+                        <?php endif;?>
+
+                        <?php /** ---- Get Other Attribute Label to thead ---- */
+                            $arrayOtherAttribute = $block->getOtherAttribute();
+                            if ($arrayOtherAttribute) :
+                                foreach ($arrayOtherAttribute as $key => $value) :
+                                    $attributeId = $value['value'];
+                                    $mobileDisplay = $value['mobile_display'];
+                                    if ($mobileDisplay == 1) :
+                            ?>
+                                <th attribute-id="<?php echo $attributeId; ?>">
+                                    <?php $label = $block->getAttributeLabel($attributeId);
+                                    ?>
+                                    <?php if ($value['image_src'] && $value['image_src'] != $iconPath) : ?>
+                                        <div class="bss-hidden icon-img">
+                                            <img src='<?= $value['image_src']?>' alt='<?= $label ?>'/>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php /* @noEscape */ echo __($label);?>
+                                </th>
+                                    <?php else : ?>
+                                <th attribute-id="<?php echo $attributeId; ?>" class="bss-hidden-480">
+                                    <?php $label = $block->getAttributeLabel($attributeId);
+                                    ?>
+                                    <?php if ($value['image_src'] && $value['image_src'] != $iconPath) : ?>
+                                        <div class="bss-hidden icon-img">
+                                            <img src='<?= $value['image_src']?>' alt='<?= $label ?>'/>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php /* @noEscape */ echo __($label);?>
+                                </th>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php /** ---- End ---- */ ?>
+
+                        <?php if ($_helper->getDisplayAttribute('unit_price') && !$_helper->checkCustomer('hide_price')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('unit_price');?>>
+                                <?php /* @noEscape */ echo __('Unit Price');?>
+                            </th>
+
+                            <?php /** ---- Get Tier Price Label to thead ---- */
+                            if ($_helper->getDisplayAttribute('tier_price')) :?>
+                                <?php if(!empty($childInfo['tierPriceRange'])): ?>
+                                    <?php foreach($childInfo['tierPriceRange'] as $child) : ?>
+                                        <?php $mobileDisplay = $_helper->getDisplayAttributeAdvanced('mobile_attr', 'mobile_active'); ?>
+                                        <?php if (in_array('tier_price',$mobileDisplay)): ?>
+                                            <th <?php echo $_helper->getClassAdvanced('unit_price');?>><?php echo __("v/"). $child . __("+ stk");?></th>
+                                        <?php else: ?>
+                                            <th class="bss-hidden-480"><?php echo "v/". $child . "+ stk";?></th>
+                                        <?php endif; ?>
+                                    <?php endforeach ?>
+                                <?php endif;?>
+                            <?php endif;?>
+                            <?php /** ---- End ---- */ ?>
+
+                        <?php endif;?>
+                        <?php if ($_helper->getExclTaxConfig() && !$_helper->checkCustomer('hide_price')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('excl_tax_price');?>>
+                                <?php /* @noEscape */ echo __('Excl. Tax');?>
+                            </th>
+                        <?php endif;?>
+                        <?php if ($_helper->getDisplayAttribute('subtotal') && !$_helper->checkCustomer('hide_price')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('subtotal');?>>
+                                <?php /* @noEscape */ echo __('Subtotal');?>
+                            </th>
+                        <?php endif;?>
+                        <?php if ($_helper->getExclTaxConfig() && !$_helper->checkCustomer('hide_price')) :?>
+                            <th <?php /* @noEscape */ echo $_helper->getClassAdvanced('excl_tax_price');?>>
+                                <?php /* @noEscape */ echo __('Subtotal Excl. Tax');?>
+                            </th>
+                        <?php endif;?>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+        <div class="text-scroll-mobile">
+            <div class="img-scroll">
+                <img src="<?php echo $this->getViewFileUrl('Bss_ConfigurableProductWholesaleCustomize::images/icon_view.png'); ?>" alt="" />
+            </div>
+            <div class="text-scroll">
+            <?php /* @noEscape */ echo __('Skub tabellen sidelæns for at se alle dimensioner og pris.');?>
+            </div>
+        </div>
+        <input type="hidden" id="bss-option-price" value="0" data-excltax-price="0" />
+        <input type="hidden" id="bss-no-swatch" value="<?php /* @noEscape */ echo $count; ?>" />
+        <input type="hidden" id="bss-table-ordering" name="bss-table-ordering" value="1" />
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "#bss-ptd-table": {
+                "Bss_ConfigurableProductWholesaleCustomize/js/table": {
+                    "jsonChildInfo": <?php /* @noEscape */ echo $childInfo['jsonChildInfo'] ?>,
+                    "tierPriceListQty": <?php /* @escapeNotVerified */ echo json_encode($childInfo['tierPriceRange']) ?>,
+                    <?php if ($priceTable = $block->getPriceTableOrdering()) :?>
+                        "jsonPriceTableOrdering": <?php /* @noEscape */ echo $priceTable;?>,
+                    <?php endif;?>
+                    "jsonSystemConfig": <?php /* @noEscape */ echo $_helper->getJsonSystemConfig($_product);?>,
+                    "fomatPrice": <?php /* @noEscape */ echo $_helper->getFomatPrice();?>,
+                    "jsonSwatchConfig": <?php /* @noEscape */ echo $block->getJsonSwatchConfig(); ?>
+                }
+            }
+        }
+    </script>
+<?php endif;?>

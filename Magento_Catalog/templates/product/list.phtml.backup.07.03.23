@@ -1,0 +1,413 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+
+<style>
+
+.hover-sizes {
+    background-color: transparent !important;
+    margin-top: 0px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+ /*   height: 100% !important;
+    max-height: 100% !important;*/
+    z-index: 3;
+}
+
+.hover-sizes p {
+    color: #fff;
+    display: block;
+    float: left;
+    margin: 0;
+    width: 100%;
+}
+
+.hover-sizes ul {
+    /* display: none; */
+    clear: both;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.hover-sizes li {
+    background: none repeat scroll 0 0 #fff;
+    color: #000;
+    display: block;
+    overflow: auto;
+    margin: 8px 8px !important;
+    text-decoration: none !important;
+    padding: 3px;
+    font-size: 12px;
+}
+
+/* bof heading */
+.item.product.product-item .product-item-info {
+    padding-top: 48px;
+}
+.hover-sizes {
+    padding-top: 11px;
+}
+
+.prolabels-wrapper {
+    margin-top: 30px;
+}
+
+.hover-sizes .custom-attributes {
+    color: #555 !important;
+    font-weight: 400;
+    font-size: 12px;
+    padding: 5px 0 16px 0;
+}
+
+.hover-sizes .custom-attributes.custom-attribute-arrow {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABN2lDQ1BBZG9iZSBSR0IgKDE5OTgpAAAokZWPv0rDUBSHvxtFxaFWCOLgcCdRUGzVwYxJW4ogWKtDkq1JQ5ViEm6uf/oQjm4dXNx9AidHwUHxCXwDxamDQ4QMBYvf9J3fORzOAaNi152GUYbzWKt205Gu58vZF2aYAoBOmKV2q3UAECdxxBjf7wiA10277jTG+38yH6ZKAyNguxtlIYgK0L/SqQYxBMygn2oQD4CpTto1EE9AqZf7G1AKcv8ASsr1fBBfgNlzPR+MOcAMcl8BTB1da4Bakg7UWe9Uy6plWdLuJkEkjweZjs4zuR+HiUoT1dFRF8jvA2AxH2w3HblWtay99X/+PRHX82Vun0cIQCw9F1lBeKEuf1UYO5PrYsdwGQ7vYXpUZLs3cLcBC7dFtlqF8hY8Dn8AwMZP/fNTP8gAAAAJcEhZcwAACxMAAAsTAQCanBgAAAXRaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjYtYzE0NSA3OS4xNjM0OTksIDIwMTgvMDgvMTMtMTY6NDA6MjIgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE5IChXaW5kb3dzKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjAtMDUtMDdUMDk6MDM6NTgrMDI6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIwLTA1LTA3VDEwOjUxOjUxKzAyOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIwLTA1LTA3VDEwOjUxOjUxKzAyOjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3MjU2MjUxZC0yMGI5LWNiNDktOTA3OS02OWQ4MmFhNGYyMzEiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpmZjMyMzVlZS1hYmFjLWI2NGYtOTgwNC00ZGMwY2FjNDI2ZDgiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpjZTllMTczYy00MzI3LWUxNDQtYmY1NS04NTJjZWRlYTMxYmQiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmNlOWUxNzNjLTQzMjctZTE0NC1iZjU1LTg1MmNlZGVhMzFiZCIgc3RFdnQ6d2hlbj0iMjAyMC0wNS0wN1QwOTowMzo1OCswMjowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MjU2MjUxZC0yMGI5LWNiNDktOTA3OS02OWQ4MmFhNGYyMzEiIHN0RXZ0OndoZW49IjIwMjAtMDUtMDdUMTA6NTE6NTErMDI6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE5IChXaW5kb3dzKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5Hm13EAAAAeElEQVQ4je3SsQ0CMQyF4S8IMR8bULICQog7TjAEJRuwYWhSmCi5Jh3C1bPl99uynHLORmIz5P4NwDYm+8Nxwg4X1NdNmJHfr+fc2yDhjEfRsb7gurpBmQBTgMG96FvoaQJakIxTy9wD1BA98xogQmr9Fen/yuOADz3FGRbW+pfPAAAAAElFTkSuQmCC') no-repeat center 23px;
+}
+.hover-sizes .custom-attributes span {
+    font-size: 14px;
+}
+/* eof heading */
+
+/*bof custom attributes */
+.custom-attributes-wrapper {
+    background: #eee;
+    overflow: auto;
+    margin: 0px 20px; /* this is used to make grey panel smaller x */
+}
+.custom-attribute-value {
+    float: left;
+    margin-left: 16px;
+}
+.custom-attribute-price {
+    float: right;
+    margin-right: 16px;
+}
+/*eof custom attributes */
+
+
+/* bof Green button with variant and product name */
+.hover-sizes {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.more-info {
+    position: relative;
+    margin-top: 30px;
+    /* bottom: 8%;
+    left: 50%;
+    font-weight: 400;
+    font-size: 16px;
+
+    transform: translateX(-50%);
+    width: 100%;
+
+    display: none; */
+}
+.more-info span {
+    padding: 8px 2px;
+    margin: 0 20px; /* this is used to make green button smaller x */
+    text-align: center;
+    color: #fff !important;
+    margin: 15px 20px 5px;
+    background: #3f9b49 !important;
+    display: block;
+}
+
+@media (max-width: 1400px) {
+    .more-info span {
+        margin: 15px 0px 5px;
+        font-size: 1.3rem;
+    }    
+}
+
+.more-info a {
+    text-decoration: none !important;
+}
+
+/* eof Green button with variant and product name */
+
+/* bof media query for product grid shown as list */
+.mobile-links {
+    display: none;
+}
+
+@media screen and (max-width: 960px) {
+    .mobile-links {
+        display: block;
+    }
+    
+    .catalog-category-view .product.photo.product-item-photo {
+        width: 30%;
+        display: inline-block;
+    }
+    
+    .catalog-category-view .product.details.product-item-details {
+        width: 68%;
+        display: inline-block;
+        vertical-align: top;
+        padding-top: 0;
+        margin-top: 0;
+    }
+    
+    .mobile-more-variants {
+        background: #7D2B2C;
+        color: #fff;
+        float: left;
+        padding: 5px;
+        font-size: 0.9em;
+        margin: 10px 0 10px 10px;
+    }
+    
+    .mobile-read-more {
+        background: #3F9B49;
+        display: inline-block;
+        padding: 10px;
+        color: #fff;
+    }
+    
+    .mobile-more-variants-info {
+        font-size: 14px;
+    }
+    
+    .mobile-more-variants a, .mobile-read-more a {
+        color: #fff;
+    }
+}
+/* bof media query for product grid shown as list */
+
+</style>
+
+
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></div></div>
+<?php else: ?>
+    <?php echo $block->getToolbarHtml() ?>
+    <?php echo $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+
+    $actionsBlockPosition = $block->getVar("argento/listing/{$viewMode}/actions/position", 'Magento_Catalog');
+    $actionsBlock = $block->getLayout()
+        ->createBlock('Magento\Framework\View\Element\Template')
+        ->setTemplate('Magento_Catalog::product/list/actions.phtml');
+    $block->setChild('actions', $actionsBlock);
+    ?>
+
+    <div class="products wrapper <?php /* @escapeNotVerified */ echo $viewMode; ?> products-<?php /* @escapeNotVerified */ echo $viewMode; ?>">
+        <?php $iterator = 1; ?>
+        <ol class="products list items product-items">
+
+        <?php 
+            // Category featured block
+            if ($block->getLayer() && $categoryId = $block->getLayer()->getCurrentCategory()->getId()) {
+                $cms_block_id = "category_featured_".$categoryId;
+
+                if ($this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($cms_block_id)->toHtml()) {
+                    echo  '<li class="item product-item twice-width category-featured hidden-mobile">';
+                    echo $this->getLayout()
+                    ->createBlock('Magento\Cms\Block\Block')
+                    ->setBlockId($cms_block_id)
+                    ->toHtml();
+                    echo '</li>';
+                }
+            }
+            // Category Geatured Guides
+            if ($block->getLayer() && $categoryId = $block->getLayer()->getCurrentCategory()->getId()) {
+                $guides_block_id = "geatured_guides_".$categoryId;
+
+                if ($this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($guides_block_id)->toHtml()) {
+                    echo  '<li class="item product-item twice-width hidden-mobile guides">';
+                    echo $this->getLayout()
+                    ->createBlock('Magento\Cms\Block\Block')
+                    ->setBlockId($guides_block_id)
+                    ->toHtml();
+                    echo '</li>';
+                }
+            }
+
+        ?>
+       
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product): ?>
+                <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+                <div class="product-item-info" data-container="product-grid">
+                    <?php 
+                        $mouseoverCode = $_product->getAttributeText('mouseover_attribute');   
+                        $mouseoverCode = preg_replace('/\[[^\]]*\]/', '', $mouseoverCode);
+                        $mouseoverCode = str_replace(array( '(', ')' ), '', $mouseoverCode);
+                    ?>
+
+                    <!-- Swissup AdditionalInfo  -->
+                    <?php  if (($_product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) && ($mouseoverCode != '') ):?>
+
+                        <p data-id="<?= $_product->getId() ?>" class="additionalinfo custom-attributes custom-attribute-arrow"><span><?php echo __('Varianter').'('. $mouseoverCode .')' ?></span></p>
+
+                        <div class="additionalinfo-spinner loadingio-spinner-dual-ball-usugnfnj6zj" style="display: none" ><div class="ldio-7oen7p207p">
+                        <div></div><div></div><div></div>
+                        </div></div>
+                        <?php 
+                        /*
+                        <p class="more-info"><span style="display: block;"><?php echo __('Gå til produkt &amp; Vælg variant') ?></span></p> 
+                        */ 
+                        ?>
+                    <?php endif; ?>
+                    <!-- Swissup AdditionalInfo End -->
+
+                    <?php
+                    $productImage = $block->getImage($_product, $image);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
+                    <div class="prolabels-wrapper">
+                        <?php
+                            $prolabelsCatalogHelper = $this->helper('Swissup\ProLabels\Helper\Catalog');
+                            echo $prolabelsCatalogHelper->getProductLabels($_product);
+                        ?>
+                        <?php // Product Image ?>
+                        <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
+                            <?php echo $productImage->toHtml(); ?>
+                            <?php
+                                if ($_helper->isModuleOutputEnabled('Swissup_HoverGallery')) {
+                                    echo $this->helper('Swissup\HoverGallery\Helper\Data')->renderHoverImage(
+                                        $_product,
+                                        $image
+                                    );
+                                }
+                            ?>
+                        </a>
+                        <?php if ($actionsBlockPosition === 'prolabels-wrapper') {
+                            if ($pos != null) {
+                                $actionsBlock->setPosition($position);
+                            }
+                            echo $actionsBlock->setProduct($_product)->toHtml();
+                        }?>
+                    </div>
+                    <div class="product details product-item-details">
+                        <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                        ?>
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link"
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            </a>
+                        </strong>
+                        <?php /* @escapeNotVerified */ echo $block->getProductPrice($_product) ?>
+
+                        <?php
+                            if ($_helper->isModuleOutputEnabled('Swissup_Fblike')) {
+                                echo $this->helper('Swissup\Fblike\Helper\Like')->getProductLike($_product);
+                            }
+                        ?>
+
+                        <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
+                        <?php echo $block->getProductDetailsHtml($_product); ?>
+                        
+                        <!-- Swissup AdditionalInfo Button -->
+                        <?php  if (($_product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) && ($mouseoverCode != '') ):?>
+                            <p class="more-info">
+                                <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" >
+                                    <span><?php echo __('Choose variant') ?></span>
+                                </a>
+                            </p>
+                        <?php else: /*Is simple*/    ?> 
+                        <?php endif; ?>
+                        <!-- Swissup AdditionalInfo Button End -->
+
+                        <div class="product-item-inner">
+                            <?php if ($actionsBlockPosition === 'default') {
+                                if ($pos != null) {
+                                    $actionsBlock->setPosition($position);
+                                }
+                                echo $actionsBlock->setProduct($_product)->toHtml();
+                            }?>
+                            <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" title="<?php /* @escapeNotVerified */ echo $_productNameStripped ?>"
+                                       class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php if ($_helper->isModuleOutputEnabled('Swissup_FeaturedAttributes')) {
+                            echo $block->getLayout()
+                                ->createBlock('Swissup\FeaturedAttributes\Block\Attributes')
+                                ->setProduct($_product)
+                                ->toHtml();
+                        }?>
+						<?php if(!empty($mouseoverCode)): ?>
+						 <a class="variants"
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                <?= __('Flere varianter') ?>
+                            </a>
+						<?php endif; ?>
+                    </div>
+                </div>
+                <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    <?php if (!$block->isRedirectToCartEnabled()) : ?>
+        <script type="text/x-magento-init" data-init-lazy="submit">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {}
+            }
+        }
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Find the parent ul element
+        var guidesList = document.querySelector(".product-items");
+        var existingGuideLi = guidesList.querySelector("li.guides");
+        if (existingGuideLi) {
+            var firstLi = guidesList.querySelector("li:first-child"); // Select the first <li> element
+
+            if (firstLi.classList.contains("category-featured")) {
+                var eighthElement = guidesList.getElementsByTagName("li")[7];
+            } else {
+                var eighthElement = guidesList.getElementsByTagName("li")[8];                  
+            }
+
+            guidesList.insertBefore(existingGuideLi, eighthElement.nextSibling);
+        }
+    });
+</script>

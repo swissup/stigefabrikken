@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.social" remove="true"/>
+        <referenceBlock name="catalog.product.related" remove="true"/>
+        <referenceBlock name="apptrian.customizations.attribs" remove="true"/>
+        <referenceBlock name="apptrian.customizations.brand" remove="true"/>
+        
+
+        <referenceBlock name="catalog.product.viewed" remove="true"/>
+
+        <referenceBlock name="move.image.under.title.on.mobile" remove="true"/>
+
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Cms\Block\Block" name="product_page_cc_dk" after="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">product_page_cc_dk</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+        <move element="product.info" destination="product.info.price"/>
+        <move element="page.main.title" destination="content" before="-"/>
+
+        <!-- <referenceBlock name="breadcrumbs" template="Magento_Theme::html/breadcrumbs.phtml" /> -->
+
+        <!-- <move element="breadcrumbs" destination="columns.top" after="-" /> -->
+
+        <referenceBlock name="product.info.main">
+            <block class="Magento\Cms\Block\Block" name="free_delivery" before="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">free_delivery</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="content">
+            <block class="Magento\Cms\Block\Block" name="product_brand">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">product_brand</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <!-- Add Measurements & Dimensions link -->
+        <referenceBlock name="product.info.options.wrapper.bottom">
+            <block class="Magento\Catalog\Block\Product\View" name="measurements_dimensions" template="Magento_Catalog::product/measurements-dimensions.phtml" />
+        </referenceBlock>
+
+
+        <referenceContainer name="content">
+            <container name="product.whole.sale" htmlTag="div" htmlClass="product whole sale" before="-"/>
+        </referenceContainer>
+    </body>
+</page>

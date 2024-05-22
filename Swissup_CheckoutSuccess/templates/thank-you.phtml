@@ -1,0 +1,1984 @@
+<?php /** @var $block \Magento\Framework\View\Element\Template */ ?>
+<?php
+    // $helper = $this->helper('Swissup\CheckoutSuccess\Helper\Data');
+    $successBlock = $block->getLayout()->getBlock('checkout.success');
+?>
+<div class="block thank-you-note">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" class="check-mark">
+        <circle class="path circle" fill="none" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"></circle>
+        <polyline class="path check" fill="none" 
+        stroke-linecap="round" stroke-miterlimit="10" 
+        points="100.2,40.2 51.5,88.8 29.8,67.5 "></polyline>
+    </svg>
+
+    <div class="block-title">
+        <strong><?= /* @noEscape */ __('Thank you for your purchase!') ?></strong>
+    </div>
+
+    <div class="block-content">
+        <?php if ($successBlock->getOrderId()):?>
+            <?php if ($successBlock->getCanViewOrder()):?>
+                <p><?= /* @noEscape */ __('Your order number is: %1.', sprintf(
+                    '<a href="%s" class="order-number"><strong>%s</strong></a>',
+                    $block->escapeHtml($successBlock->getViewOrderUrl()),
+                    $block->escapeHtml($successBlock->getOrderId())
+                )) ?></p>
+            <?php  else:?>
+                <p>
+                <?= /* @noEscape */ __('Your order # is: <span>%1</span>.', $block->escapeHtml(
+                    $successBlock->getOrderId()
+                )) ?>
+                </p>
+            <?php endif;?>
+                <p>
+                <?= /* @noEscape */ __('We\'ll email you an order confirmation with details and tracking info.') ?>
+                </p>
+            <?php if ($successBlock->getCanPrintOrder() && $successBlock->getCanViewOrder()):?>
+                <p>
+                <?= /* @noEscape */ __(
+                    'Click <a href="%1" 
+				onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.',
+                    $successBlock->getPrintUrl()
+                ) ?></p>
+            <?php endif;?>
+        <?php endif;?>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <a class="action primary continue" 
+                href="<?= /* @noEscape */ $successBlock->getContinueUrl() ?>"><span>
+                <?= /* @noEscape */ __('Continue Shopping') ?></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+$orderID = $successBlock->getOrderId();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$order = $objectManager->create(Magento\Sales\Model\Order::class)->loadByIncrementId($successBlock->getOrderId());
+
+if ($order->getCustomerFirstname()) {
+    $firstname      = $order->getCustomerFirstname();
+    $lastname       = $order->getCustomerLastname();
+     
+    $customer_email = $order->getCustomerEmail();
+    $telephone = $order->getShippingAddress()->getTelephone();
+
+    
+} else {
+    $customer  = $objectManager->create(Magento\Customer\Model\Customer::class)->load($order->getCustomerId());
+    $customer_email = $order->getCustomerEmail();
+    $firstname = $customer->getDefaultBillingAddress()->getFirstname();
+    $lastname  = $customer->getDefaultBillingAddress()->getLastname();
+    $telephone  = $customer->getDefaultBillingAddress()->getTelephone();
+    
+}
+
+?>
+
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$orderAttributesData = [];
+$ctypelabel = '';
+$entity = $objectManager->create(Amasty\Orderattr\Model\Entity\EntityResolver::class)->getEntityByOrder($order);
+$form = $objectManager->create(Amasty\Orderattr\Model\Value\Metadata\Form::class)
+->setFormCode('frontend_order_view')
+->setEntity($entity)->setStore($order->getStore());
+$outputData = $form->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML);
+foreach ($outputData as $attributeCode => $data) {
+    if (!empty($data)) {
+        $attribute = $form->getAttribute($attributeCode);
+        if ($attributeCode == 'customer_type') {
+                  $ctypelabel = $data;
+        }
+                
+                
+    }
+}
+$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+$storeId = $storeManager->getStore()->getId();
+?>
+
+<?php if ($ctypelabel == 'Privatkunde' || $ctypelabel == 'Privatkund') { ?>
+
+<div class="CheckoutSuccess">
+         
+               
+                <div class="CheckoutSuccess-survey">
+                    <section className='survey'>
+                    <h4 class="CheckoutSuccess-survey-title">
+                    <?= /* @noEscape */ $firstname ?>
+                    <?=  /* @noEscape */ __(', can we ask a few quick questions?') ?>
+                    </h4>
+
+                    <aside class="survey_col_area">
+
+                        <!-- q1 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1 firstquestion">
+                        <h3 class="survey-col-title"><?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?></h3>
+                        <ul id="Hvilken">
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery1" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="1" />
+                                <label for="surveyquery1"><?=  /* @noEscape */ __('1') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery2" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="2" />
+                                <label for="surveyquery2"><?=  /* @noEscape */ __('2') ?></label> 
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery3" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="3" />
+                                <label for="surveyquery3">
+                                <?=  /* @noEscape */ __('3') ?>
+                                </label> 
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery4" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="4" />
+                                <label for="surveyquery4"><?=  /* @noEscape */ __('4') ?></label>
+                            </li>  
+                                
+                             <li>
+                                <input type="radio" class="hidebtn" id="pr_1" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="4" />
+                                <label for="pr_1"><?=  /* @noEscape */ __('4') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_7" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="5" />
+                                <label for="pr_7"><?=  /* @noEscape */ __('5') ?></label>
+                            </li>                            
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_8" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="6" />
+                                <label for="pr_8"><?=  /* @noEscape */ __('6') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_9" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="7" />
+                                <label for="pr_9"><?=  /* @noEscape */ __('7') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_10" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="8" />
+                                <label for="pr_10"><?=  /* @noEscape */ __('8') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_11" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="9" />
+                                <label for="pr_11"><?=  /* @noEscape */ __('9') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_12" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="10" />
+                                <label for="pr_12"><?=  /* @noEscape */ __('10') ?></label>
+                            </li>
+                            
+                        </ul>
+
+                    </div>
+                     <!-- q2 -->
+                    <div class="CheckoutSuccess-survey-col survey-col2">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?></h3>
+                        <ul id="doyouown">
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery5" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per telefon') ?>" />
+                                <label for="surveyquery5">
+                                <?=  /* @noEscape */ __('Ja, per telefon') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery6" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per mail') ?>" />
+                                <label for="surveyquery6">
+                                <?=  /* @noEscape */ __('Ja, per mail') ?></label>
+                            </li>
+                            <?php if ($storeId == 1) { ?>
+                             <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery_7" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Ja, i showroom') ?>" />
+                                <label for="surveyquery_7">
+                                <?=  /* @noEscape */ __('Ja, i showroom') ?></label>
+                            </li>
+                            <?php } ?>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="pr_2" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Nej') ?>" />
+                                <label for="pr_2">
+                                <?=  /* @noEscape */ __('Nej') ?></label>
+                            </li>
+                                                    
+                        </ul>
+
+                    </div>
+                    
+                    <!-- q5 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery15" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Pris') ?>"/>
+                                <label for="surveyquery15">
+                                <?=  /* @noEscape */ __('Pris') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery16" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Leveringstid') ?>"/>
+                                <label for="surveyquery16">
+                                <?=  /* @noEscape */ __('Leveringstid') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_3" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Sortiment') ?>"/>
+                                <label for="pr_3">
+                                <?=  /* @noEscape */ __('Sortiment') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_4" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>"/>
+                                <label for="pr_4">
+                                <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_5" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>"/>
+                                <label for="pr_5">
+                                <?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>
+                                </label>
+                            </li>
+                                                                                            
+                        </ul>
+                    </div>    
+                        <!-- q6 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>
+                        </h3>
+                        <ul id="Hvilken">
+                            <li>
+                                 <textarea class="hidebtn Indt_tekstfelt" 
+                                name=" <?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>" rows="4" cols="50"></textarea>
+                            </li>
+                         </ul>
+
+                    </div>
+                    
+                    <!-- q7 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_10" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value="<?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>"/>
+                                <label for="er_10">
+                                <?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_11" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value="<?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>"/>
+                                <label for="er_11">
+                                <?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_12" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>"
+                                value="<?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>"
+                                />
+                                <label for="er_12">
+                                <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>
+                                </label>
+                            </li>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    <!-- q8-->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?></h3>
+                        <ul>
+                        <?php if ($storeId == 1) { ?>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_16" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>"/>
+                                <label for="er_16">
+                                <?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>
+                                </label>
+                            </li>
+                        <?php } ?>    
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_17" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Zarges') ?>"/>
+                                <label for="er_17">
+                                <?=  /* @noEscape */ __('Zarges') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_18" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Jumbo') ?>"/>
+                                <label for="er_18">
+                                <?=  /* @noEscape */ __('Jumbo') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_19" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="er_19">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_20" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Dolle') ?>"/>
+                                <label for="er_20">
+                                <?=  /* @noEscape */ __('Dolle') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_21" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Custers') ?>"/>
+                                <label for="er_21">
+                                <?=  /* @noEscape */ __('Custers') ?>
+                                </label>
+                            </li>
+                            
+                            <?php if ($storeId == 2 || $storeId == 3) { ?>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Skepsshultstagen" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Skepsshultstagen ') ?>"/>
+                                <label for="str_2_er_Skepsshultstagen">
+                                <?=  /* @noEscape */ __('Skepsshultstagen ') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Wibe" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="str_2_er_Wibe">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Werner" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Werner') ?>"/>
+                                <label for="str_2_er_Werner">
+                                <?=  /* @noEscape */ __('Werner') ?>
+                                </label>
+                            </li>
+                            
+                            <?php } ?>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+
+                        <!-- q9 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvordan kan vi forbedre vores service?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                <textarea class="hidebtn Indt_tekstfelt" 
+                                name="Hvordan kan vi forbedre vores service?" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    <!-- q10 -->
+                       <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Er der andet feedback, du gerne vil give os?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                               <textarea class="Indt_tekstfelt hidebtn" 
+                               name="Er der andet feedback, du gerne vil give os?" rows="4" cols="50"
+                               ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    
+                    
+                    
+                    </aside>
+                    <input type="hidden" name="orderemail" 
+                    id="orderemail" value="<?= /* @noEscape */ $customer_email ?>"> 
+                    <input type="hidden" name="firstname" id="firstname" value="<?= /* @noEscape */ $firstname ?>"> 
+                    <input type="hidden" name="lastname" id="lastname" value="<?= /* @noEscape */ $lastname ?>">
+                    <input type="hidden" name="telephone" id="telephone" value="<?= /* @noEscape */ $telephone ?>"> 
+                   
+
+                    <div class="col-md-12 checkoutpage 
+                    spacing text-center center-block"></div>
+                    <a class="action primary" id="submitsurvey"><span> 
+                    <?= /* @noEscape */ __('Submit a reply') ?> </span></a>
+                    <div class="alert alert-success" 
+                    id="surveymessage" style="display:none;">
+                        <strong><?= /* @noEscape */ __('Thank you!') ?></strong> 
+                        <?= /* @noEscape */ __('for answering our questions') ?> .
+                    </div>
+                    </section>
+                </div>
+            </div>
+
+<?php } elseif ($ctypelabel == 'Erhvervskunde' || $ctypelabel == 'Företagskund' || $ctypelabel == 'Bedriftskunde') { ?>
+
+<div class="CheckoutSuccess">
+         
+               
+                <div class="CheckoutSuccess-survey">
+                    <section className='survey'>
+                    <h4 class="CheckoutSuccess-survey-title">
+                    <?= /* @noEscape */ $firstname ?>
+                    <?=  /* @noEscape */ __(', can we ask a few quick questions?') ?>
+                    </h4>
+
+                    <aside class="survey_col_area">
+
+                    
+                        <!-- q1 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1 firstquestion">
+                        <h3 class="survey-col-title"><?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?></h3>
+                        <ul id="Hvilken">
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery1" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="1" />
+                                <label for="surveyquery1"><?=  /* @noEscape */ __('1') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery2" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="2" />
+                                <label for="surveyquery2"><?=  /* @noEscape */ __('2') ?></label> 
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery3" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="3" />
+                                <label for="surveyquery3">
+                                <?=  /* @noEscape */ __('3') ?>
+                                </label> 
+                            </li>
+
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery4" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="4" />
+                                <label for="surveyquery4"><?=  /* @noEscape */ __('4') ?></label>
+                            </li>  
+                                
+                            
+
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_7" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="5" />
+                                <label for="pr_7"><?=  /* @noEscape */ __('5') ?></label>
+                            </li>                            
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_8" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="6" />
+                                <label for="pr_8"><?=  /* @noEscape */ __('6') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_9" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="7" />
+                                <label for="pr_9"><?=  /* @noEscape */ __('7') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_10" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="8" />
+                                <label for="pr_10"><?=  /* @noEscape */ __('8') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_11" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="9" />
+                                <label for="pr_11"><?=  /* @noEscape */ __('9') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_12" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="10" />
+                                <label for="pr_12"><?=  /* @noEscape */ __('10') ?></label>
+                            </li>
+                            
+                        </ul>
+
+                    </div>
+                    
+                     
+                    <!-- q2 -->
+                    <div class="CheckoutSuccess-survey-col survey-col2">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?></h3>
+                        <ul id="doyouown">
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery5" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per telefon') ?>" />
+                                <label for="surveyquery5">
+                                <?=  /* @noEscape */ __('Ja, per telefon') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery6" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per mail') ?>" />
+                                <label for="surveyquery6">
+                                <?=  /* @noEscape */ __('Ja, per mail') ?></label>
+                            </li>
+                            <?php if ($storeId == 1) { ?>
+                             <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery_7" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, i showroom') ?>" />
+                                <label for="surveyquery_7">
+                                <?=  /* @noEscape */ __('Ja, i showroom') ?></label>
+                            </li>
+                            <?php } ?>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="pr_2" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Nej') ?>" />
+                                <label for="pr_2">
+                                <?=  /* @noEscape */ __('Nej') ?></label>
+                            </li>
+                                                    
+                        </ul>
+
+                    </div>
+                      
+                 <!-- q5 -->    
+                <div class="CheckoutSuccess-survey-col 
+                    survey-col4 checkoutpage spacing text-center center-block toggle-content" >
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>
+                        </h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_1" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?= /* @noEscape */  __('Industri') ?>"/>
+                                <label for="er_1"><?= /* @noEscape */  __('Industri') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_2" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Byggeri') ?>"/>
+                                <label for="er_2"><?=  /* @noEscape */ __('Byggeri') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_3" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Handel') ?>"/>
+                                <label for="er_3"><?=  /* @noEscape */ __('Handel') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_4" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Fødevarer') ?>"/>
+                                <label for="er_4"><?=  /* @noEscape */ __('Fødevarer') ?></label>
+                            </li>    
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_5" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="Transport"/>
+                                <label for="er_5"><?=  /* @noEscape */ __('Transport') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_6" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Service') ?>"/>
+                                <label for="er_6"><?=  /* @noEscape */ __('Service') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_7" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('IT') ?>"/>
+                                <label for="er_7"><?=  /* @noEscape */ __('IT') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_8" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Medicinal') ?>"/>
+                                <label for="er_8"><?=  /* @noEscape */ __('Medicinal') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_9" name="<?=  /* @noEscape */ __('Hvilken branche beskriver bedst din virksomhed?') ?>" 
+                                value="<?=  /* @noEscape */ __('Andet') ?>"/>
+                                <label for="er_9"><?=  /* @noEscape */ __('Andet') ?></label>
+                            </li>        
+                            
+                        </ul>
+                    </div>
+                    
+                    <!-- q6 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery15" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Pris') ?>"/>
+                                <label for="surveyquery15">
+                                <?=  /* @noEscape */ __('Pris') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery16" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Leveringstid') ?>"/>
+                                <label for="surveyquery16">
+                                <?=  /* @noEscape */ __('Leveringstid') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_3" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Sortiment') ?>"/>
+                                <label for="pr_3">
+                                <?=  /* @noEscape */ __('Sortiment') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_4" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>"/>
+                                <label for="pr_4">
+                                <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_5" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>"/>
+                                <label for="pr_5">
+                                <?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>
+                                </label>
+                            </li>
+                                                                                            
+                        </ul>
+                    </div> 
+                    
+                    <!-- q7 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_10" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value="<?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>"/>
+                                <label for="er_10">
+                                <?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_11" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value="<?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>"/>
+                                <label for="er_11">
+                                <?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_12" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>"
+                                value="<?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>" />
+                                <label for="er_12">
+                                <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>
+                                </label>
+                            </li>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    <!-- q8-->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_13" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja da! Det er fuldt dokumenteret.') ?>"/>
+                                <label for="er_13">
+                                <?=  /* @noEscape */ __('Ja da! Det er fuldt dokumenteret.') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_14" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Lovpligtigt? Nej, det kender jeg ikke til.') ?>"/>
+                                <label for="er_14">
+                                <?=  /* @noEscape */ __('Lovpligtigt? Nej, det kender jeg ikke til.') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_15" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>"/>
+                                <label for="er_15">
+                                <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>
+                                </label>
+                            </li>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    <!-- q9-->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?></h3>
+                        <ul>
+                        <?php if ($storeId == 1) { ?>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_16" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>"/>
+                                <label for="er_16">
+                                <?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>
+                                </label>
+                            </li>
+                        <?php } ?>    
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_17" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Zarges') ?>"/>
+                                <label for="er_17">
+                                <?=  /* @noEscape */ __('Zarges') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_18" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Jumbo') ?>"/>
+                                <label for="er_18">
+                                <?=  /* @noEscape */ __('Jumbo') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_19" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="er_19">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_20" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Dolle') ?>"/>
+                                <label for="er_20">
+                                <?=  /* @noEscape */ __('Dolle') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_21" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Custers') ?>"/>
+                                <label for="er_21">
+                                <?=  /* @noEscape */ __('Custers') ?>
+                                </label>
+                            </li>
+                            
+                            <?php if ($storeId == 2 || $storeId == 3) { ?>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Skepsshultstagen" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Skepsshultstagen ') ?>"/>
+                                <label for="str_2_er_Skepsshultstagen">
+                                <?=  /* @noEscape */ __('Skepsshultstagen ') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Wibe" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="str_2_er_Wibe">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Werner" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Werner') ?>"/>
+                                <label for="str_2_er_Werner">
+                                <?=  /* @noEscape */ __('Werner') ?>
+                                </label>
+                            </li>
+                            
+                            <?php } ?>
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    
+                     <!-- q10 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>
+                        </h3>
+                        <ul id="Hvilken">
+                            <li>
+                                 <textarea class="hidebtn Indt_tekstfelt" 
+                                name="<?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                            
+
+                                                   
+                        </ul>
+
+                    </div>
+
+                        <!-- q11 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvordan kan vi forbedre vores service?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                <textarea class="hidebtn Indt_tekstfelt" 
+                                name="<?=  /* @noEscape */ __('Hvordan kan vi forbedre vores service?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    <!-- q12 -->
+                       <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Er der andet feedback, du gerne vil give os?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                <textarea class="hidebtn Indt_tekstfelt"  
+                                name="<?=  /* @noEscape */ __('Er der andet feedback, du gerne vil give os?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    
+                    
+                    
+                    </aside>
+                    <input type="hidden" name="orderemail" 
+                    id="orderemail" value="<?= /* @noEscape */ $customer_email ?>"> 
+                    <input type="hidden" name="firstname" id="firstname" value="<?= /* @noEscape */ $firstname ?>"> 
+                    <input type="hidden" name="lastname" id="lastname" value="<?= /* @noEscape */ $lastname ?>">
+                    <input type="hidden" name="telephone" id="telephone" value="<?= /* @noEscape */ $telephone ?>"> 
+                   
+
+                    <div class="col-md-12 checkoutpage 
+                    spacing text-center center-block"></div>
+                    <a class="action primary" id="submitsurvey"><span> 
+                    <?= /* @noEscape */ __('Submit a reply') ?> </span></a>
+                    <div class="alert alert-success" 
+                    id="surveymessage" style="display:none;">
+                        <strong><?= /* @noEscape */ __('Thank you!') ?></strong> 
+                        <?= /* @noEscape */ __('for answering our questions') ?> .
+                    </div>
+                    </section>
+                </div>
+            </div>
+
+
+<?php } elseif ($ctypelabel == 'Offentlig organisation' || $ctypelabel == 'Offentlig kund' || $ctypelabel == 'Offentlig kunde') { ?>
+
+<div class="CheckoutSuccess">
+         
+               
+                <div class="CheckoutSuccess-survey">
+                    <section className='survey'>
+                    <h4 class="CheckoutSuccess-survey-title">
+                    <?= /* @noEscape */ $firstname ?>
+                    <?=  /* @noEscape */ __(', can we ask a few quick questions?') ?>
+                    </h4>
+
+                    <aside class="survey_col_area">
+
+                    
+                        <!-- q1 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1 firstquestion">
+                        <h3 class="survey-col-title"><?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?></h3>
+                        <ul id="Hvilken">
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery1" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="1" />
+                                <label for="surveyquery1"><?=  /* @noEscape */ __('1') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery2" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="2" />
+                                <label for="surveyquery2"><?=  /* @noEscape */ __('2') ?></label> 
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery3" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="3" />
+                                <label for="surveyquery3">
+                                <?=  /* @noEscape */ __('3') ?>
+                                </label> 
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery4" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="4" />
+                                <label for="surveyquery4"><?=  /* @noEscape */ __('4') ?></label>
+                            </li>  
+                                
+                             <li>
+                                <input type="radio" class="hidebtn" id="pr_1" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="4" />
+                                <label for="pr_1"><?=  /* @noEscape */ __('4') ?></label>
+                            </li>
+
+<li>
+                                <input type="radio" class="hidebtn" id="pr_7" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="5" />
+                                <label for="pr_7"><?=  /* @noEscape */ __('5') ?></label>
+                            </li>                            
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_8" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="6" />
+                                <label for="pr_8"><?=  /* @noEscape */ __('6') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_9" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="7" />
+                                <label for="pr_9"><?=  /* @noEscape */ __('7') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_10" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="8" />
+                                <label for="pr_10"><?=  /* @noEscape */ __('8') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_11" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="9" />
+                                <label for="pr_11"><?=  /* @noEscape */ __('9') ?></label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" id="pr_12" 
+                                name="<?=  /* @noEscape */ __('Bedøm din samlede købsoplevelse på hjemmesiden på en skala fra 1 til 10?') ?>" 
+                                value="10" />
+                                <label for="pr_12"><?=  /* @noEscape */ __('10') ?></label>
+                            </li>                            
+                            
+                        </ul>
+
+                    </div>
+                    
+                     
+ <!-- q2 -->
+                    <div class="CheckoutSuccess-survey-col survey-col2">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?></h3>
+                        <ul id="doyouown">
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery5" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per telefon') ?>" />
+                                <label for="surveyquery5">
+                                <?=  /* @noEscape */ __('Ja, per telefon') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery6" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, per mail') ?>" />
+                                <label for="surveyquery6">
+                                <?=  /* @noEscape */ __('Ja, per mail') ?></label>
+                            </li>
+                            <?php if ($storeId == 1) { ?>
+                             <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery_7" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja, i showroom') ?>" />
+                                <label for="surveyquery_7">
+                                <?=  /* @noEscape */ __('Ja, i showroom') ?></label>
+                            </li>
+                            <?php } ?>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="pr_2" 
+                                name="<?=  /* @noEscape */ __('Kontaktede du vores kundeservice forud for dit køb?') ?>" 
+                                value="<?=  /* @noEscape */ __('Nej') ?>" />
+                                <label for="pr_2">
+                                <?=  /* @noEscape */ __('Nej') ?></label>
+                            </li>
+                                                    
+                        </ul>
+
+                    </div>
+                    
+                     
+                    <!-- q5 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery15" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Pris') ?>"/>
+                                <label for="surveyquery15">
+                                <?=  /* @noEscape */ __('Pris') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="surveyquery16" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="Leveringstid"/>
+                                <label for="surveyquery16">
+                                <?=  /* @noEscape */ __('Leveringstid') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_3" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Sortiment') ?>"/>
+                                <label for="pr_3">
+                                <?=  /* @noEscape */ __('Sortiment') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_4" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>"/>
+                                <label for="pr_4">
+                                <?=  /* @noEscape */ __('Nemt at anvende shoppen') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="checkbox" class="hidebtn" 
+                                id="pr_5" 
+                                name="<?=  /* @noEscape */ __('Hvad var vigtigt for at du handlede hos os?') ?>" 
+                                value="<?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>"/>
+                                <label for="pr_5">
+                                <?=  /* @noEscape */ __('Tryghed ved at handle hos en specialist') ?>
+                                </label>
+                            </li>
+                                                                                            
+                        </ul>
+                    </div> 
+                    
+                    <!-- q6 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_10" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value="<?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>"/>
+                                <label for="er_10">
+                                <?=  /* @noEscape */ __('Begynder (Lidt eller ingen erfaring)') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_11" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>"/>
+                                <label for="er_11">
+                                <?=  /* @noEscape */ __('Mellem (Lidt erfaring, men ikke ekspert)') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_12" 
+                                name="<?=  /* @noEscape */ __('Hvor stor er din erfaring med at arbejde med stiger, stilladser o.lign. produkter?') ?>" 
+                                value=" <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>"/>
+                                <label for="er_12">
+                                <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>
+                                </label>
+                            </li>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    <!-- q7-->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_13" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ja da! Det er fuldt dokumenteret.') ?>"/>
+                                <label for="er_13">
+                                <?=  /* @noEscape */ __('Ja da! Det er fuldt dokumenteret.') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_14" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Lovpligtigt? Nej, det kender jeg ikke til.') ?>"/>
+                                <label for="er_14">
+                                <?=  /* @noEscape */ __('Lovpligtigt? Nej, det kender jeg ikke til.') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_15" 
+                                name="<?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?>" 
+                                value="<?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>"/>
+                                <label for="er_15">
+                                <?=  /* @noEscape */ __('Ekspert (Hyppig brug og komfortabel i brugen)') ?>
+                                </label>
+                            </li>
+                            
+                                                                                     
+                        </ul>
+                    </div> 
+                    
+                    <!-- q8-->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?></h3>
+                        <ul>
+                        <?php if ($storeId == 1) { ?>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_16" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>"
+                                value="<?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>"
+                                />
+                                <label for="er_16">
+                                <?=  /* @noEscape */ __('Silkeborg Stigefabrik') ?>
+                                </label>
+                            </li>
+                        <?php } ?>    
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_17" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Zarges') ?>"/>
+                                <label for="er_17">
+                                <?=  /* @noEscape */ __('Zarges') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_18" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Jumbo') ?>"/>
+                                <label for="er_18">
+                                <?=  /* @noEscape */ __('Jumbo') ?>
+                                </label>
+                            </li>
+                            
+                             <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_19" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="er_19">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_20" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Dolle') ?>"/>
+                                <label for="er_20">
+                                <?=  /* @noEscape */ __('Dolle') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="er_21" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Custers') ?>"/>
+                                <label for="er_21">
+                                <?=  /* @noEscape */ __('Custers') ?>
+                                </label>
+                            </li>
+                            
+                                     
+                            <?php if ($storeId == 2 || $storeId == 3) { ?>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Skepsshultstagen" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Skepsshultstagen ') ?>"/>
+                                <label for="str_2_er_Skepsshultstagen">
+                                <?=  /* @noEscape */ __('Skepsshultstagen ') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Wibe" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Wibe') ?>"/>
+                                <label for="str_2_er_Wibe">
+                                <?=  /* @noEscape */ __('Wibe') ?>
+                                </label>
+                            </li>
+                            
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="str_2_er_Werner" 
+                                name="<?=  /* @noEscape */ __('Forud for dit køb, kendte du et eller flere af disse mærker?') ?>" 
+                                value="<?=  /* @noEscape */ __('Werner') ?>"/>
+                                <label for="str_2_er_Werner">
+                                <?=  /* @noEscape */ __('Werner') ?>
+                                </label>
+                            </li>
+                            
+                            <?php } ?>
+                                     
+                        </ul>
+                    </div> 
+                    
+                    
+                     <!-- q9 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>
+                        </h3>
+                        <ul id="Hvilken">
+                            <li>
+                               <textarea class="hidebtn Indt_tekstfelt"
+                                name="<?=  /* @noEscape */ __('Har du forslag til forbedring af hjemmesiden?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                            
+
+                                                   
+                        </ul>
+
+                    </div>
+
+                        <!-- q10 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Hvordan kan vi forbedre vores service?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                <textarea class="hidebtn Indt_tekstfelt"
+                                name="<?=  /* @noEscape */ __('Hvordan kan vi forbedre vores service?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    <!-- q11 -->
+                       <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Er der andet feedback, du gerne vil give os?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                 <textarea class="hidebtn Indt_tekstfelt" 
+                                name="<?=  /* @noEscape */ __('Er der andet feedback, du gerne vil give os?') ?>" rows="4" cols="50"
+                                ></textarea>
+                            </li>
+                                                                             
+                        </ul>
+
+                    </div>
+                    
+                    
+                    
+                    </aside>
+                    <input type="hidden" name="orderemail" 
+                    id="orderemail" value="<?= /* @noEscape */ $customer_email ?>"> 
+                    <input type="hidden" name="firstname" id="firstname" value="<?= /* @noEscape */ $firstname ?>"> 
+                    <input type="hidden" name="lastname" id="lastname" value="<?= /* @noEscape */ $lastname ?>">
+                    <input type="hidden" name="telephone" id="telephone" value="<?= /* @noEscape */ $telephone ?>"> 
+                   
+
+                    <div class="col-md-12 checkoutpage 
+                    spacing text-center center-block"></div>
+                    <a class="action primary" id="submitsurvey"><span> 
+                    <?= /* @noEscape */ __('Submit a reply') ?> </span></a>
+                    <div class="alert alert-success" 
+                    id="surveymessage" style="display:none;">
+                        <strong><?= /* @noEscape */ __('Thank you!') ?></strong> 
+                        <?= /* @noEscape */ __('for answering our questions') ?> .
+                    </div>
+                    </section>
+                </div>
+            </div>
+
+
+<?php } else { ?>
+
+<div class="CheckoutSuccess">
+         
+               
+                <div class="CheckoutSuccess-survey">
+                    <section className='survey'>
+                    <h4 class="CheckoutSuccess-survey-title">
+                    <?= /* @noEscape */ $firstname ?>
+                    <?=  /* @noEscape */ __(', can we ask a few quick questions?') ?>
+                    </h4>
+
+                    <aside class="survey_col_area">
+
+                        <!-- q1 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1 firstquestion">
+                        <h3 class="survey-col-title"><?=  /* @noEscape */ __('Hvem handler du til?') ?></h3>
+                        <ul id="Hvilken">
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery1" 
+                                name="Hvem handler du til?" 
+                                value="Mig selv" />
+                                <label for="surveyquery1"><?=  /* @noEscape */ __('Mig selv') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery2" 
+                                name="Hvem handler du til?" 
+                                value="Min virksomhed" />
+                                <label for="surveyquery2"><?=  /* @noEscape */ __('Min virksomhed') ?></label> 
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery3" 
+                                name="Hvem handler du til?" 
+                                value="En virksomhed hvor jeg er ansat" />
+                                <label for="surveyquery3">
+                                <?=  /* @noEscape */ __('En virksomhed hvor jeg er ansat') ?>
+                                </label> 
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery4" 
+                                name="Hvem handler du til?" 
+                                value="En forening" />
+                                <label for="surveyquery4"><?=  /* @noEscape */ __('En forening') ?></label>
+                            </li>                        
+                        </ul>
+
+                    </div>
+                     <!-- q2 -->
+                    <div class="CheckoutSuccess-survey-col survey-col2">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('Har du styr på det lovligpligtige årlige stigeftersyn?') ?></h3>
+                        <ul id="doyouown">
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery5" 
+                                name="Har du styr på det lovligpligtige årlige stigeftersyn?" 
+                                value="Ja da! Det er fuldt dokumenteret" />
+                                <label for="surveyquery5">
+                                <?=  /* @noEscape */ __('Ja da! Det er fuldt dokumenteret') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery6" 
+                                name="Har du styr på det lovligpligtige årlige stigeftersyn?" 
+                                value="Lovpligtigt? Stigeeftersyn? Af hvad for en fisk?" />
+                                <label for="surveyquery6">
+                                <?=  /* @noEscape */ __('Lovpligtigt? Stigeeftersyn? Af hvad for en fisk?') ?></label>
+                            </li>
+                             <li>
+                                <input type="radio" class="hidebtn leje" id="surveyquery_7" 
+                                name="Har du styr på det lovligpligtige årlige stigeftersyn?" 
+                                value="Nej, men jeg ved godt jeg burde" />
+                                <label for="surveyquery_7">
+                                <?=  /* @noEscape */ __('Nej, men jeg ved godt jeg burde') ?></label>
+                            </li>
+                            
+                                                    
+                        </ul>
+
+                    </div>
+
+                     <!-- q3 -->
+                    <div class="CheckoutSuccess-survey-col survey-col3">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('What is your level of experience with using ladders?') ?>
+                        </h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery_10" name="What is your level of experience with using ladders?" 
+                                value="Novice (little to no experience)" />
+                                <label for="surveyquery_10">
+                                <?=  /* @noEscape */ __('Novice (little to no experience)') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery10" name="What is your level of experience with using ladders?" 
+                                value="Intermediate (some experience but not an expert)" />
+                                <label for="surveyquery10">
+                                <?=  /* @noEscape */ __('Intermediate (some experience but not an expert)') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery11" name="What is your level of experience with using ladders?" 
+                                value="Expert (frequent use and high level of comfort)" />
+                                <label for="surveyquery11">
+                                <?=  /* @noEscape */ __('Expert (frequent use and high level of comfort)') ?>
+                                </label>
+                            </li>
+                      
+                        </ul>
+                    </div>
+
+                    <!-- q4 -->
+                    <div class="CheckoutSuccess-survey-col 
+                    survey-col4 checkoutpage spacing text-center center-block toggle-content" >
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('How frequently do you plan to use the ladder?') ?>
+                        </h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery12" name="How frequently do you plan to use the ladder?" 
+                                value="Once or twice a year"/>
+                                <label for="surveyquery12"><?= /* @noEscape */  __('Once or twice a year') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery13" name="How frequently do you plan to use the ladder?" 
+                                value="Several times a year"/>
+                                <label for="surveyquery13"><?=  /* @noEscape */ __('Several times a year') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery14" name="How frequently do you plan to use the ladder?" 
+                                value="Monthly"/>
+                                <label for="surveyquery14"><?=  /* @noEscape */ __('Monthly') ?></label>
+                            </li> 
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery141" name="How frequently do you plan to use the ladder?" 
+                                value="Weekly or more"/>
+                                <label for="surveyquery14"><?=  /* @noEscape */ __('Weekly or more') ?></label>
+                            </li>                             
+                        </ul>
+                    </div>
+
+
+                    <!-- q5 -->
+                    <div class="CheckoutSuccess-survey-col survey-col5 
+                    checkoutpage spacing text-center center-block toggle-content" 
+                    id="motivation">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('What was the main reason for your purchase?') ?></h3>
+                        <ul>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery15" 
+                                name="What was the main reason for your purchase?" 
+                                value="Home use (e.g. changing light bulbs, reaching high shelves)"/>
+                                <label for="surveyquery15">
+                                <?=  /* @noEscape */ __('Home use (e.g. changing light bulbs,') ?>
+                                <?=  /* @noEscape */ __('reaching high shelves)') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery16" 
+                                name="What was the main reason for your purchase?" 
+                                value="Work use (e.g. construction, painting)"/>
+                                <label for="surveyquery16">
+                                <?=  /* @noEscape */ __('Work use (e.g. construction, painting)') ?>
+                                </label>
+                            </li>
+                                                                                            
+                        </ul>
+                    </div>    
+                        <!-- q6 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('How many people will be using the ladder?') ?>
+                        </h3>
+                        <ul id="Hvilken">
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery20" 
+                                name="How many people will be using the ladder?" 
+                                value="One person" />
+                                <label for="surveyquery20">
+                                <?=  /* @noEscape */ __('One person') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery21" 
+                                name="How many people will be using the ladder?" 
+                                value="Two people" />
+                                <label for="surveyquery21">
+                                <?=  /* @noEscape */ __('Two people') ?>
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery22" 
+                                name="How many people will be using the ladder?" 
+                                value=" More than two people" />
+                                <label for="surveyquery22">
+                                <?=  /* @noEscape */ __('More than two people') ?>
+                                </label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery23" 
+                                name="How many people will be using the ladder?" 
+                                value="No - This is the first time I/we are trying" />
+                                <label for="surveyquery23">
+                                <?=  /* @noEscape */ __('No - This is the first time I/we are trying') ?>
+                                </label>
+                            </li>                        
+                        </ul>
+
+                    </div>
+
+                        <!-- q7 -->
+                    <div class="CheckoutSuccess-survey-col survey-col1">
+                        <h3 class="survey-col-title">
+                        <?=  /* @noEscape */ __('What is the maximum weight you') ?>
+                        <?=  /* @noEscape */ __('will be carrying while on the ladder?') ?>
+                        </h3>
+                        <ul id="motivation">
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery24" 
+                                name="What is the maximum weight you will be carrying while on the ladder?" 
+                                value="Less than 25 kg" />
+                                <label for="surveyquery24">
+                                <?=  /* @noEscape */ __('Less than 25 kg') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" id="surveyquery25" 
+                                name="What is the maximum weight you will be carrying while on the ladder?" 
+                                value="Between 25 and 50 kg" />
+                                <label for="surveyquery25">
+                                <?=  /* @noEscape */ __('Between 25 and 50 kg') ?></label>
+                            </li>
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery26" 
+                                name="What is the maximum weight you will be carrying while on the ladder?" 
+                                value="Between 50 and 100 kg" />
+                                <label for="surveyquery26">
+                                <?=  /* @noEscape */ __('Between 50 and 100 kg') ?></label>
+                            </li>
+
+                            <li>
+                                <input type="radio" class="hidebtn" 
+                                id="surveyquery27" 
+                                name="What is the maximum weight you will be carrying while on the ladder?" 
+                                value="More than 100 kg" />
+                                <label for="surveyquery27">
+                                <?=  /* @noEscape */ __('More than 100 kg') ?></label>
+                            </li>                                                  
+                        </ul>
+
+                    </div>
+                    
+                    </aside>
+                    <input type="hidden" name="orderemail" 
+                    id="orderemail" value="<?= /* @noEscape */ $customer_email ?>"> 
+                    <input type="hidden" name="firstname" id="firstname" value="<?= /* @noEscape */ $firstname ?>"> 
+                    <input type="hidden" name="lastname" id="lastname" value="<?= /* @noEscape */ $lastname ?>">
+                    <input type="hidden" name="telephone" id="telephone" value="<?= /* @noEscape */ $telephone ?>"> 
+                   
+
+                    <div class="col-md-12 checkoutpage 
+                    spacing text-center center-block"></div>
+                    <a class="action primary" id="submitsurvey"><span> 
+                    <?= /* @noEscape */ __('Submit a reply') ?> </span></a>
+                    <div class="alert alert-success" 
+                    id="surveymessage" style="display:none;">
+                        <strong><?= /* @noEscape */ __('Thank you!') ?></strong> 
+                        <?= /* @noEscape */ __('for answering our questions') ?> .
+                    </div>
+                    </section>
+                </div>
+            </div>
+
+<?php } ?>
+
+            
+
+<script type="text/javascript">
+        require(['jquery', 'jquery/ui'], function($){
+        $(document).ready( function() {
+
+
+        var inputs = document.querySelectorAll("input[type=radio], input[type=text] , input[type=checkbox]"),
+            x=inputs.length;
+            while(x--)
+            inputs[x].addEventListener("change",function(){
+                
+                var email = $("#orderemail").val();
+                 var firstname = $("#firstname").val();
+                 var lastname = $("#lastname").val();
+                  var telephone = $("#telephone").val();
+                
+               window.dataLayer.push(
+               {
+                   "event": "SuccessSurvey",
+                   "identify": [{
+                       'first_name' : firstname,
+                       'last_name' : lastname,
+                       'email' : email,
+                       'phone': telephone
+                    }],
+                   "SuccessSurvey": [{
+                        "question": this.name,
+                        "response": this.value
+                    }]
+                    
+               }
+                )
+
+
+             
+        },0);
+        
+
+            
+        $(".Indt_tekstfelt").blur(function(){
+          
+          
+          var email = $("#orderemail").val();
+                 var firstname = $("#firstname").val();
+                 var lastname = $("#lastname").val();
+                  var telephone = $("#telephone").val();
+                
+               window.dataLayer.push(
+               {
+                   "event": "SuccessSurvey",
+                   "identify": [{
+                       'first_name' : firstname,
+                       'last_name' : lastname,
+                       'email' : email,
+                       'phone': telephone
+                    }],
+                   "SuccessSurvey": [{
+                        "question": $(this).attr('name'),
+                        "response": $(this).val()
+                    }]
+                    
+               }
+                )
+          
+        });    
+
+        $("#submitsurvey").click(function(){
+
+            var email = $("#orderemail").val();
+            var firstname = $("#firstname").val();
+            var lastname = $("#lastname").val();
+               /* window.dataLayer.push({       
+                'event': 'identify',
+                'email' : email,
+                'first_name' : firstname,
+                'last_name' : lastname  
+                }); */
+
+
+            setTimeout(function(){ document.getElementById('submitsurvey').style.display = "none"; }, 10);
+            var successmessage = document.getElementById('surveymessage');
+            successmessage.style.opacity = "100";
+            setTimeout(function(){ successmessage.style.display = "block"; }, 600);
+        });
+
+
+
+        });
+        });
+</script>
+<style>
+  /* -- success --*/
+.multishipping-checkout-success .column.main, .checkout-onepage-success .column.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.multishipping-checkout-success .page-title-wrapper, 
+.checkout-onepage-success .page-title-wrapper, 
+.checkout-success-wrapper {
+  max-width: 1000px;
+}
+
+.CheckoutSuccess {
+  margin: 50px 0 0 0;
+  padding: 50px 0 0 00;
+  border-top: 1px solid #ccc;
+}
+aside.survey_col_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:center; 
+    align-items: center; 
+}
+
+.CheckoutSuccess-survey {
+    border: 1px solid grey;
+    padding: 15px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.CheckoutSuccess-survey-col {
+    width: 100%;
+    max-width: calc(50% - 10px);
+}
+
+ul#doyouown {}
+
+aside.survey_col_area ul {
+    padding: 0;
+    list-style: none;
+}
+
+aside.survey_col_area ul li {
+    margin: 0 0 12px 0;
+    position: relative;
+}
+
+aside.survey_col_area ul li label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+aside.survey_col_area ul li input {
+    position: absolute;
+    opacity: 0;
+}
+
+aside.survey_col_area ul li label:hover {
+    border-color: #333;
+}
+aside.survey_col_area ul li input:checked + label {
+    background:#333;
+    color:#fff;
+}
+
+
+
+
+h4.CheckoutSuccess-survey-title {
+    font-size: 28px;
+    text-align: center;
+    font-weight: 600;
+}
+
+aside.survey_col_area ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:center; 
+    align-items: center; 
+}
+
+aside.survey_col_area ul li {
+    margin: 0 10px 12px 0;
+}
+
+.Indt_tekstfelt { opacity: 1 !important;     position: inherit !important; }
+.firstquestion { max-width: 100% !important; }
+
+@media screen and (max-width:767px) { /* 640 px */
+    .CheckoutSuccess-survey-col {
+        max-width: unset;
+    }
+
+}
+</style>

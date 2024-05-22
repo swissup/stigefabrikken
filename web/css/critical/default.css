@@ -1,0 +1,34 @@
+@font-face{font-display:swap;font-family:FontAwesome;src:url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0);src:url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0) format('embedded-opentype'),url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0) format('woff2'),url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0) format('woff'),url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0) format('truetype'),url({{pagespeed_asset_url}}/Swissup_FontAwesome/font-awesome-4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular) format('svg');font-weight:400;font-style:normal}aside,header,main,nav{display:block}nav ul{list-style:none}img{max-width:100%;border:0;height:auto;max-height:none}html{font-size:62.5%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-size-adjust:100%}body{margin:0;color:#2e2e2e;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-style:normal;font-weight:400;line-height:1.42857143;font-size:1.6rem;direction:ltr;background:#fff}strong{font-weight:700}i{font-style:italic}h2{font-weight:700;line-height:1.3;font-size:3rem;margin-top:2.75rem;margin-bottom:3rem}h3{font-weight:700;line-height:1.1;font-size:2rem;margin-top:2.2rem;margin-bottom:1rem}div.block .block-title strong{color:#2e2e2e;font-weight:700;font-size:1.6rem;margin-top:0;margin-bottom:1.6rem}a,a:visited{color:#3e9bf7;text-decoration:none}ul>li{margin-top:0;margin-bottom:0}ul ul{margin-bottom:0}pre{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;background:#f6f6f6;border:1px solid #e5e5e5;color:#111;line-height:1.42857143;margin:0 0 10px;padding:10px;font-size:1.4rem;display:block;word-wrap:break-word}button{border:2px solid #f54336;display:inline-block;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;margin:0;padding:10px 15px;font-size:1.6rem;box-sizing:border-box;vertical-align:middle;line-height:18px}button::-moz-focus-inner{border:0;padding:0}input[type=text]{background:padding-box #fff;border:1px solid #ccc;border-radius:2px;font-family:'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:16px;height:54px;line-height:1.42857143;padding:15px 18px;vertical-align:baseline;width:100%;box-sizing:border-box}input[type=text]::-moz-placeholder{color:#575757}input[type=text]::-webkit-input-placeholder{color:#575757}input[type=text]:-ms-input-placeholder{color:#575757}input::-moz-focus-inner{border:0;padding:0}.footer.content ul{margin:0;padding:0;list-style:none}.footer.content ul>li{margin:0}.block{margin-bottom:44px}.minicart-wrapper .action.showcart .counter-label,.minicart-wrapper .action.showcart .text{border:0;clip:rect(0,0,0,0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.header.content:after,.header.content:before{content:'';display:table}.header.content:after{clear:both}.argento-tabs:not(.argento-tabs-initialized)>*>.block-content{display:none}@font-face{font-family:'Open Sans';src:url({{pagespeed_asset_url}}/fonts/opensans/light/opensans-300.woff2) format('woff2'),url({{pagespeed_asset_url}}/fonts/opensans/light/opensans-300.woff) format('woff');font-weight:300;font-style:normal;font-display:swap}@font-face{font-family:'Open Sans';src:url({{pagespeed_asset_url}}/fonts/opensans/regular/opensans-400.woff2) format('woff2'),url({{pagespeed_asset_url}}/fonts/opensans/regular/opensans-400.woff) format('woff');font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:'Open Sans';src:url({{pagespeed_asset_url}}/fonts/opensans/semibold/opensans-600.woff2) format('woff2'),url({{pagespeed_asset_url}}/fonts/opensans/semibold/opensans-600.woff) format('woff');font-weight:600;font-style:normal;font-display:swap}@font-face{font-family:'Open Sans';src:url({{pagespeed_asset_url}}/fonts/opensans/bold/opensans-700.woff2) format('woff2'),url({{pagespeed_asset_url}}/fonts/opensans/bold/opensans-700.woff) format('woff');font-weight:700;font-style:normal;font-display:swap}
+
+.product-items.widget-product-carousel .product-item .tocart {
+    font-size: 15px;
+}
+  
+.sidebar_cms {
+    float: left;
+    padding-top: 75px !important;
+    max-width: 15%;
+}
+  
+@media (max-width: 767px) {
+  .sidebar_cms {
+      display: none;
+  }
+  .banner-topbar-dk {
+    min-height: 53px;
+  }
+  header.page-header {height: 136px;}
+  .page-main {
+      margin-top: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+    .page-main {
+        margin-top: 138px;
+    }
+}
+
+.header.content .counter.qty.empty {
+    display: none;
+  }

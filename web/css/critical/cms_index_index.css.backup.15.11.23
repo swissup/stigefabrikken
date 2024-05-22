@@ -1,0 +1,81 @@
+.helloretail-frontpage-box1 h2{text-align:center}h3{font-weight:700;line-height:1.1;font-size:2rem;margin-top:2.2rem;margin-bottom:1rem}@media only screen and (max-width:768px){.cms-index-index .columns .column.main{margin:0;padding:0}.cms-index-index .columns .column.main .block{margin:0 10px 10px}}@media (min-width:768px) and (max-width:1023px){.hidden-sm{display:none!important}}.cms-index-index .page-main{max-width:none;padding:0}.cms-index-index .section-space{margin:0 auto;text-align:center;max-width:1455px;}@media (max-width:767px){.apptrian-subcategories-grid li{width:33.3%!important}.front-mobile-squares img{display:none!important}.front-mobile-squares li.apptrian-subcategories-category-wrapper{background:#8b3639!important;margin:2px!important}.front-mobile-squares .apptrian-subcategories-category-name span{color:#fff!important;font-weight:400!important;text-decoration:none!important}.front-mobile-squares .apptrian-subcategories-grid li{width:48%!important}}@media (min-width:768px){.apptrian-subcategories-grid li{width:16.5%!important}}.apptrian-subcategories-category-name span{color:#555;font-size:16px;font-weight:700;text-decoration:underline}.apptrian-subcategories-grid .apptrian-subcategories-category-image img{border-radius:180px!important;aspect-ratio:1/1;margin:0;padding:0;border:none;width:100%}.cms-index-index .column.main{background:#f7f7f7}.section-space{margin:0 auto;text-align:center;max-width:1455px}ul.apptrian-subcategories-grid{text-align:center}.front-mobile-squares{max-width:1455px;margin:0 auto}.cms-index-index .home-banners-grid{display:grid;grid-auto-rows:1fr;grid-template-columns:clamp(150px,34%,490px) 1fr 1fr;grid-template-rows:1fr 1fr;gap:10px 10px;grid-template-areas:"big-square-left small-top-left small-top-right" "big-square-left big-bottom big-bottom"}@media (max-width:480px){.apptrian-subcategories-grid li{overflow:hidden!important}.cms-index-index .home-banners-grid{grid-auto-rows:1fr;grid-template-columns:1fr;grid-template-rows:1fr;grid-template-areas:"big-square-left"}.cms-index-index .big-bottom,.cms-index-index .small-top-left,.cms-index-index .small-top-right{display:none}}.apptrian-subcategories-grid{clear:both;display:block;margin:0;padding:0;border:none;box-sizing:content-box;width:100%;list-style-type:none;text-align:left}.apptrian-subcategories-grid li{display:inline-block;text-align:left;margin:0;padding:0;border:none;box-sizing:content-box;width:25%;vertical-align:top}.apptrian-subcategories-grid .apptrian-subcategories-category{display:block;margin:16px}.apptrian-subcategories-grid .apptrian-subcategories-category-name{text-align:center}@media only screen and (min-width:320px){.apptrian-subcategories-grid li{width:100%}}@media only screen and (min-width:360px){.apptrian-subcategories-grid li{width:100%}}@media only screen and (min-width:400px){.apptrian-subcategories-grid li{width:100%}}@media only screen and (min-width:480px){.apptrian-subcategories-grid li{width:50%}}@media only screen and (min-width:540px){.apptrian-subcategories-grid li{width:50%}}@media only screen and (min-width:600px){.apptrian-subcategories-grid li{width:50%}}@media only screen and (min-width:640px){.apptrian-subcategories-grid li{width:50%}}@media only screen and (min-width:720px){.apptrian-subcategories-grid li{width:33.3%}}@media only screen and (min-width:768px){.apptrian-subcategories-grid li{width:33.3%}}@media only screen and (min-width:800px){.apptrian-subcategories-grid li{width:33.3%}}@media only screen and (min-width:960px){.apptrian-subcategories-grid li{width:33.3%}}@media only screen and (min-width:1024px){.apptrian-subcategories-grid li{width:25%}}@media only screen and (min-width:1280px){.apptrian-subcategories-grid li{width:25%}}
+.helloretail-frontpage-box2 { margin-bottom: 10px; }
+
+.easyslide-wrapper .swiper-container{text-align:center}.easyslide-description{position:absolute;overflow:hidden;padding:15px 20px;text-align:left;box-sizing:border-box;font:12px Arial,Helvetica,sans-serif!important}.easyslide-description-top{top:0;left:0;width:100%}.easyslide-description a{text-decoration:none;color:#5a5a5a}.easyslide-background-transparent{color:#000}.swiper-lazy-preloader~*{visibility:hidden}@media only screen and (max-width:767px){.cms-index-index .columns .column.main{margin:0;padding:0}}.jumbotron{background:#fff;padding:25px 0 20px;position:relative}.jumbotron.jumbotron-image{background:#fff}.jumbotron.no-padding{padding:0}.cms-index-index .page-main{max-width:none;padding:0}.cms-index-index .jumbotron.jumbotron-image{margin:0;background-color:#d4d8da;border-bottom:1px solid #709ea0}.swiper-lazy-preloader{width:42px;height:42px;position:absolute;left:50%;top:50%;margin-left:-21px;margin-top:-21px;z-index:10;-webkit-transform-origin:50%;-ms-transform-origin:50%;transform-origin:50%;-webkit-animation:1s steps(12,end) infinite swiper-preloader-spin;animation:1s steps(12,end) infinite swiper-preloader-spin}.swiper-lazy-preloader:after{display:block;content:'';width:100%;height:100%;background-position:50%;background-size:100%;background-repeat:no-repeat}@-webkit-keyframes swiper-preloader-spin{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes swiper-preloader-spin{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@media all and (min-width:768px),print{.cms-index-index .jumbotron.jumbotron-image{margin-bottom:30px}}@media (max-width:767px){.jumbotron.jumbotron-image.no-padding{display:none}}.cms-index-index .column.main{background:#f7f7f7}.cms-index-index .easyslide-swiper-argento_stripes .easyslide-background-transparent{height:100%;width:100%;text-align:center;margin:0 auto!important;display:block;padding:40px}.slider-image{width:25%;float:left;display:block}.slider-image img{border:4px solid #fff;border-radius:2px;box-shadow:0 0 4px #777}
+
+.home-banner {clear: both;}.home-banner img{aspect-ratio:5.82;width: auto; height: auto;}
+@media only screen and (min-width:1280px){.home-banner {height:250px}}
+
+@media (min-width:768px) {
+    .content-blocks.blocks-two img {width: 625px; height: 468px;  }
+    .helloretail-frontpage-box1,
+    .helloretail-frontpage-box2 {min-height: 493px;}
+    .apptrian-subcategories-grid li.apptrian-subcategories-category-wrapper {
+        display: inline-block;
+    }
+    .front-mobile-squares .apptrian-subcategories-grid li.apptrian-subcategories-category-wrapper {
+        width: 16.5%;
+        display: inline-block;
+    }
+    .section-space.banners-grid  {
+        height: 495px;
+        margin: 0 auto;
+        text-align: center;
+        max-width: 1455px;
+        overflow: hidden;
+    }
+
+    .cms-index-index .home-banners-grid {
+        display: grid;
+        grid-auto-rows: 1fr;
+        grid-template-columns: clamp(150px,34%,490px) 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px 10px;
+        grid-template-areas: "big-square-left small-top-left small-top-right" "big-square-left big-bottom big-bottom"
+    }
+    .cms-index-index .big-square-left { grid-area: big-square-left }
+    .cms-index-index .big-bottom {grid-area: big-bottom}
+    .cms-index-index .small-top-left { grid-area: small-top-left}
+    .cms-index-index .small-top-right { grid-area: small-top-right }
+    .front-mobile-squares {
+        max-width: 1455px;
+        margin: 0 auto;
+    }
+    .front-mobile-squares .apptrian-subcategories-grid {
+        height: 268px;
+    }
+}
+
+@media (min-width:768px) and (max-width:1279px){
+    .home-banner {height:176px}
+}
+@media (max-width:768px){.home-banner {height:132px}}
+@media (max-width:480px){
+    .home-banner {height:73px;clear: both;}
+    .cms-index-index .section-space { height: 338px; display: inline-block; clear: both; }
+    .cms-index-index .section-space.banners-grid {height: 410px;}
+    .section-space picture {height: 310px}
+    .front-mobile-squares .apptrian-subcategories-grid li.apptrian-subcategories-category-wrapper{
+        height: 60px; width: 48% !important; display: inline-block;}
+    .front-mobile-squares .apptrian-subcategories-grid li.apptrian-subcategories-category-wrapper .apptrian-subcategories-category-image {
+        display: none;
+    }
+    .apptrian-subcategories-grid li.apptrian-subcategories-category-wrapper{
+        width: 33%; height: 180px; display: inline-block;
+    }
+    .cms-index-index .big-square-left { height: 405px;}
+    .cms-index-index .big-bottom,
+    .cms-index-index .small-top-left,
+    .cms-index-index .small-top-right {
+        display: none;
+    }
+    .content-blocks.blocks-two img {width: 375px; height: 280px;  }
+
+    .front-mobile-squares {min-height: 224px;}
+    .helloretail-frontpage-box1,
+    .helloretail-frontpage-box2 {min-height: 340px;}
+
+    .cms-index-index .section-space.banners-grid .widget.block.block-static-block { height: 405px; width: 405px; }
+
+
+}
