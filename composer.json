@@ -1,6 +1,7 @@
 {
     "name": "local/stigefabrikken",
     "type": "magento2-theme",
+    "description": "Stigefabrikken store theme"
     "version": "1.0.0",
     "require": {
         "swissup/theme-frontend-argento-stripes": "*"
