@@ -1,4 +1,4 @@
-## Install fort composer using using:
+## Installation
 
 Add following to repositories list on server and pull the files:
 
