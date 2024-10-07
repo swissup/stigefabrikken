@@ -232,9 +232,6 @@ a, a:hover { color: @red-color; }
 	}
 }
 
-.product-item-sku {
-	font-size: 14px;
-}
 
 .easycatalogimg .parent-category-top {
     margin: 5px 12px;
@@ -3440,7 +3437,28 @@ div#klarna-payment-link {
 
 /*Product page*/
 
+
+
+
 .catalog-product-view {
+
+	&:not(.configurable-simple) {
+		.product-info-price {
+			.price {
+				opacity: 0;
+			}
+		}
+	}
+	
+	&.configurable-simple {
+		.product-info-price {
+			.price {
+				opacity: 1;
+				transition: opacity 0.3s ease-in-out;
+			}
+		}
+	}
+
 	.brand-logo img { height: 48px; }
 
 	.product-info-main {

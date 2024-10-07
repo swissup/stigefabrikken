@@ -1,5 +1,14 @@
     $.mixin('configurable', {
 
+        _reloadPrice: function (original) {
+            original();
+            console.log('Entered configurable');
+            var body = document.querySelector('#html-body');
+            if (body) {
+                body.classList.add('configurable-simple');
+            }
+        },
+
         _fillSelect: function (original, element) {
             var attributeId = element.id.replace(/[a-z]*/, ''),
                 options = this._getAttributeOptions(attributeId),
