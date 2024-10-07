@@ -2,7 +2,7 @@
     "name": "swissup/stigefabrikken",
     "type": "magento2-theme",
     "description": "Stigefabrikken store theme",
-    "version": "1.2.3",
+    "version": "1.2.5",
     "require": {
         "swissup/theme-frontend-argento-stripes": "*"
     },
