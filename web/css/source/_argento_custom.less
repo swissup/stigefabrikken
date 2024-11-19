@@ -3443,19 +3443,22 @@ div#klarna-payment-link {
 
 .catalog-product-view {
 
-	&:not(.configurable-simple) {
-		.product-info-price {
-			.price {
-				opacity: 0;
+	&.page-product-configurable {
+		&:not(.configurable-simple) {
+			.product-info-price {
+				.price {
+					opacity: 0;
+					//opacity: 1;
+				}
 			}
 		}
-	}
-	
-	&.configurable-simple {
-		.product-info-price {
-			.price {
-				opacity: 1;
-				transition: opacity 0.3s ease-in-out;
+		
+		&.configurable-simple {
+			.product-info-price {
+				.price {
+					opacity: 1;
+					transition: opacity 0.3s ease-in-out;
+				}
 			}
 		}
 	}
