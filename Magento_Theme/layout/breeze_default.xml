@@ -12,7 +12,10 @@
                   <item name="mixins" xsi:type="array">
                     <item name="configurable" xsi:type="string">configurable</item>
                   </item>
-                </item>
+                </item> 
+                <!-- Add this lines to disable the stock qty by Client request --> 
+                <item name="configurableVariationQty" xsi:type="boolean">false</item>
+                <item name="Magento_InventoryConfigurableProductFrontendUi/js/configurable" xsi:type="boolean">false</item>
               </item>
             </item>
           </argument>
@@ -20,4 +23,5 @@
       </referenceBlock>
     </body>
 </page>
+
 
