@@ -361,6 +361,14 @@ a, a:hover { color: @red-color; }
 	}
 }
 
+.page-before-footer {
+	.widget.testimonials-slider {
+		.swiper-button-black::after {
+			display: none !important;
+		}
+	}
+}
+
 .footerbar p {
     display: contents;
 }
@@ -1597,6 +1605,22 @@ a, a:hover { color: @red-color; }
  		display: none;
 	}
 
+	.nav-toggle {
+		display: flex;
+		flex-direction: column;
+		margin-top: -5px;	
+
+		&>span {
+			overflow: visible;
+			color: #8b3639;
+			font-size: 10px;
+			position: relative;
+			margin: auto;
+			left: -13px;
+			top: -6px;
+		}
+	}
+
 	.swissup-navigationpro {
 		.easycatalogimg-grid {
 			.item {
@@ -2254,7 +2278,9 @@ a, a:hover { color: @red-color; }
 	.page-main {
 		margin-top: 82px;
 	}
-
+	.checkout-index-index .page-main {
+		margin-top: 55px !important;
+	}
     .homepage-bar .col-md-4 {
         text-align: left !important;
     }
@@ -3642,6 +3668,7 @@ span.short-description-read-more {
 	.checkout-index-index .page-main {
 		margin-top: 55px !important;
 	}
+
 	.cms-index-index {
 		.home-banners-grid {
 			grid-auto-rows: 1fr; 
