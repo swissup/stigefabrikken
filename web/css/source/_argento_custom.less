@@ -366,6 +366,34 @@ a, a:hover { color: @red-color; }
 		.swiper-button-black::after {
 			display: none !important;
 		}
+		figure.testimonial {
+			padding: 40px 5px 0;
+			blockquote {
+				padding: 20px 10px;
+				font-size: 12px;
+	
+				&:before,
+				&:after {
+					font-size: 30px;
+				}
+				&:before {
+					top: 10px;
+					left: 10px;
+				}
+				&:after {
+					bottom: 0px;
+					right: 10px;
+				}
+			}
+			.author {
+				padding: 0 10px;
+				bottom: 15px;
+				h5 {
+					margin: 0;
+					font-size: 1rem;
+				}
+			}
+		}
 	}
 }
 
