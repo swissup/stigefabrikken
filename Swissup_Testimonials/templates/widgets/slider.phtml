@@ -33,6 +33,11 @@
                         </div>
                         <?php endif; ?>
                         <p class="testimonial-message"><?= $block->escapeHtml($testimonial->getMessage()); ?></p>
+
+                        <?php if ($testimonial->getWebsite()): ?>
+                            <a href="<?= $testimonial->getWebsite() ?>"><?= __('Full review') ?></a>
+                        <?php endif; ?>
+
                         <div class="arrow"></div>
                     </blockquote>
                     <!-- <img src="<?= $block->getProfileImageUrl($testimonial) ?>" alt="Profile image" loading="lazy" /> -->
