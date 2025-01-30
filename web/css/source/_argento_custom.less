@@ -361,48 +361,47 @@ a, a:hover { color: @red-color; }
 	}
 }
 
-.page-bottom,
-.page-before-footer {
-	.widget.testimonials-slider {
-		.swiper-button-black::after {
-			display: none !important;
-		}
-		figure.testimonial {
-			padding: 40px 5px 0;
-			blockquote {
-				padding: 20px 10px;
-				font-size: 12px;
-	
-				&:before,
-				&:after {
-					font-size: 30px;
-				}
-				&:before {
-					top: 10px;
-					left: 10px;
-				}
-				&:after {
-					bottom: 0px;
-					right: 10px;
-				}
+
+.widget.testimonials-slider {
+	.swiper-button-black::after {
+		display: none !important;
+	}
+	figure.testimonial {
+		padding: 40px 5px 0;
+		blockquote {
+			padding: 20px 10px;
+			font-size: 12px;
+
+			&:before,
+			&:after {
+				font-size: 30px;
 			}
-			a {
-				color: @red-color;
+			&:before {
+				top: 10px;
+				left: 10px;
 			}
-			.author {
-				padding: 0 10px;
-				bottom: 15px;
-				h5 {
-					margin: 0;
-					font-size: 1rem;
-				}
+			&:after {
+				bottom: 0px;
+				right: 10px;
 			}
 		}
-		.rating-summary .rating-result>span:before {
-			color: #3E9B49;
+		a {
+			color: @red-color;
+		}
+		.author {
+			padding: 0 10px;
+			bottom: 15px;
+			h5 {
+				margin: 0;
+				font-size: 1rem;
+			}
 		}
 	}
+	.rating-summary .rating-result>span:before {
+		color: #3E9B49;
+	}
 }
+
 
 .footerbar p {
     display: contents;
