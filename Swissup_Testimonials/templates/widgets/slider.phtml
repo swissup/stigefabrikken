@@ -35,7 +35,7 @@
                         <p class="testimonial-message"><?= $block->escapeHtml($testimonial->getMessage()); ?></p>
 
                         <?php if ($testimonial->getWebsite()): ?>
-                            <a href="<?= $testimonial->getWebsite() ?>"><?= __('Full review') ?></a>
+                            <a target="_blank" href="<?= $testimonial->getWebsite() ?>"><?= __('Full review') ?></a>
                         <?php endif; ?>
 
                         <div class="arrow"></div>
