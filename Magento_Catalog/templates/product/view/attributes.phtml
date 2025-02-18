@@ -24,10 +24,10 @@
             <?php foreach ($_additional as $_data) :?>
                 <tr>
                     <th class="col label" scope="row"><?= $block->escapeHtml($_data['label']) ?></th>
-                                    <td class="col data" data-th="<?= $block->escapeHtmlAttr($_data['label']) ?>">
+                        <td class="col data" data-th="<?= $block->escapeHtmlAttr($_data['label']) ?>">
                     <?php
                         $value = $_helper->productAttribute($_product, $_data['value'], $_data['code']);
-                        if (is_numeric($value)) {
+                        if (is_numeric($value) && $_data['code'] !== 'sku') {
                             $value = number_format((float)$value, 2, '.', '');
                         }
                         echo /* @noEscape */ $value;
