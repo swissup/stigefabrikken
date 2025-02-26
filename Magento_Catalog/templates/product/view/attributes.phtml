@@ -15,6 +15,12 @@
 <?php
     $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
     $_product = $block->getProduct();
+    $storeUrl = $block->getUrl(''); // Get the base store URL
+    
+    // Get current locale
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+    $currentLocale = $localeResolver->getLocale();
 ?>
 <?php if ($_additional = $block->getAdditionalData()) :?>
     <div class="additional-attributes-wrapper table-wrapper">
@@ -30,7 +36,34 @@
                         if (is_numeric($value) && $_data['code'] !== 'sku') {
                             $value = number_format((float)$value, 2, '.', '');
                         }
-                        echo /* @noEscape */ $value;
+                        $attributeCode = $_data['code'];
+                        $attributeValue = $value;
+                        
+                        if ($attributeCode === 'manufacturer') {
+                            // Determine template based on locale
+                            $brandTemplate = 'Apptrian_Customizations::brand/brand-tab-dk.phtml'; // Default
+                            
+                            if ($currentLocale === 'nb_NO') {
+                                $brandTemplate = 'Apptrian_Customizations::brand/brand-tab-no.phtml';
+                            } elseif ($currentLocale === 'sv_SE') {
+                                $brandTemplate = 'Apptrian_Customizations::brand/brand-tab-se.phtml';
+                            } elseif ($currentLocale === 'da_DK') {
+                                $brandTemplate = 'Apptrian_Customizations::brand/brand-tab-dk.phtml';
+                            } 
+                            
+                            // Render the Brand block using the layout
+                            echo $block->getLayout()
+                                ->createBlock('Apptrian\Customizations\Block\Brand')
+                                ->setTemplate($brandTemplate)
+                                ->toHtml();
+                        } elseif ($attributeCode === 'serie') {
+                            $urlPath = strtolower($attributeValue); // Convert to lowercase for URL path
+                            $urlPath = urlencode($urlPath); // Encode the attribute value for URL
+                            $url = $storeUrl . $attributeCode . '/' . $urlPath;
+                            echo '<a href="' . $url . '">' . htmlspecialchars($attributeValue) . '</a>'; // Use original attribute value for display
+                        } else {
+                            echo htmlspecialchars($attributeValue); // Display the attribute value as is
+                        }
                     ?>
                     </td>
                 </tr>

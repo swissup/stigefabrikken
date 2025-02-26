@@ -1,0 +1,27 @@
+<?php
+/**
+ * @category  Apptrian
+ * @package   Apptrian_Customizations
+ * @author    Apptrian
+ * @copyright Copyright (c) 2017 Apptrian (http://www.apptrian.com)
+ * @license   http://www.apptrian.com/license Proprietary Software License EULA
+ */
+
+/**
+ * Brand block
+ *
+ * @var $block \Apptrian\Customizations\Block\Brand
+ */
+?>
+<?php
+    $brandName = $block->getBrandName();
+    $brandKey  = $block->getBrandKey($brandName);
+    $baseUrl   = $block->getBaseUrl();
+?>
+<?php if($brandName): ?>
+<div class="brand-tab-logo">
+    <?php
+        echo '<a href="'. $baseUrl . 'varumarken/' . $brandKey . '"><img src="' . $baseUrl . 'pub/media/catalog/brand/' . $brandKey . '.png" alt="' . $brandName . '"></a>';
+    ?>
+</div>
+<?php endif; ?>
