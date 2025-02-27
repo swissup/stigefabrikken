@@ -61,7 +61,17 @@
                             $urlPath = urlencode($urlPath); // Encode the attribute value for URL
                             $url = $storeUrl . $attributeCode . '/' . $urlPath;
                             echo '<a href="' . $url . '">' . htmlspecialchars($attributeValue) . '</a>'; // Use original attribute value for display
-                        } else {
+                        } elseif ($attributeCode === 'main_category') {
+                            // If the value contains a slash, get the part after the slash
+                            if (strpos($attributeValue, '/') !== false) {
+                                $parts = explode('/', $attributeValue);
+                                $urlPath = strtolower(end($parts)); // Get the part after the slash and convert to lowercase
+                            } else {
+                                $urlPath = strtolower($attributeValue);
+                            }
+                            $urlPath = urlencode($urlPath); // Encode for URL
+                            $url = $storeUrl . $attributeCode . '/' . $urlPath;
+                            echo '<a href="' . $url . '">' . htmlspecialchars($attributeValue) . '</a>';                        } else {
                             echo htmlspecialchars($attributeValue); // Display the attribute value as is
                         }
                     ?>
