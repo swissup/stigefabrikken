@@ -70,9 +70,9 @@
                                 $urlPath = strtolower($attributeValue);
                             }
                             $urlPath = urlencode($urlPath); // Encode for URL
-                            $url = $storeUrl . $attributeCode . '/' . $urlPath;
-                            echo '<a href="' . $url . '">' . htmlspecialchars($attributeValue) . '</a>';                        } else {
-                            echo htmlspecialchars($attributeValue); // Display the attribute value as is
+                            $url = $storeUrl . $attributeValue;
+                            echo '<a href="' . $url . '">' . ucwords($urlPath) . '</a>';                        } else {
+                            echo htmlspecialchars($attributeValue); // Display the attribute value as is 
                         }
                     ?>
                     </td>
