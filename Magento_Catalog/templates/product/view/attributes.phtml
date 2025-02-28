@@ -57,10 +57,16 @@
                                 ->setTemplate($brandTemplate)
                                 ->toHtml();
                         } elseif ($attributeCode === 'serie') {
-                            $urlPath = strtolower($attributeValue); // Convert to lowercase for URL path
-                            $urlPath = urlencode($urlPath); // Encode the attribute value for URL
-                            $url = $storeUrl . $attributeCode . '/' . $urlPath;
-                            echo '<a href="' . $url . '">' . htmlspecialchars($attributeValue) . '</a>'; // Use original attribute value for display
+                            // If the value contains a slash, get the part after the slash
+                            if (strpos($attributeValue, '/') !== false) {
+                                $parts = explode('/', $attributeValue);
+                                $urlPath = strtolower(end($parts)); // Get the part after the slash and convert to lowercase
+                            } else {
+                                $urlPath = strtolower($attributeValue);
+                            }
+                            $urlPath = urlencode($urlPath); // Encode for URL
+                            $url = $storeUrl . $attributeValue;
+                            echo '<a href="' . $url . '">' . ucwords($urlPath) . '</a>';
                         } elseif ($attributeCode === 'main_category') {
                             // If the value contains a slash, get the part after the slash
                             if (strpos($attributeValue, '/') !== false) {
