@@ -5,7 +5,7 @@ define([
     'use strict';
 
     // Move checkout fields to the desired position
-    move('.swissup-checkout-fields').after('.block.items-in-cart', 0);
+    move('.swissup-checkout-fields').after('.fc-order-summary-copy .table-totals', 0);
 
     // DataLayer for email tracking
     $.async('#customer-email', $('#checkout').get(0),
@@ -105,27 +105,82 @@ define([
                 var items = [];
                 $('.opc-block-summary ol.minicart-items .product-item').each(function() {
                     var $item = $(this);
+                    var itemName = $item.find('.product-item-name').text().trim();
+                    var itemId = $item.find('.product-item-sku').text().replace('Varenummer:', '').trim();
+                                    var priceText = $item.find('.price').text();
+                                    var price = parseFloat(
+                                        priceText
+                                            .replace(/[^\d,\.]/g, '') // Remove currency symbols and spaces
+                                            .replace(/\./g, '')       // Remove thousand separators (periods)
+                                            .replace(',', '.')        // Replace decimal comma with period
+                                    ) / (parseInt($item.find('.qty').val()) || 1);
+                    var quantity = parseInt($item.find('.qty').val()) || 1;
+                    
+                    // Get additional product data from data attributes or defaults
+                    var $productEl = $item.closest('.product-item');
+                    var affiliation = $('meta[name="store"]').attr('content') || "Main Website - Stigefabrikken.dk - Default Store View";
+                    var itemBrand = $productEl.data('brand') || itemName.split(' ')[0] || "Jumbo";
+                    var category = $productEl.data('category') || "Mærker";
+                    var category2 = itemBrand;
+                    var listName = category + "/" + category2;
+                    var listId = $productEl.data('list-id') || "88";
+                    var stockStatus = $productEl.hasClass('out-of-stock') ? "Out of stock" : "In stock";
+                    var saleProduct = $productEl.hasClass('on-sale') ? "Yes" : "No";
+                    var reviewsCount = $productEl.data('reviews-count') || "0";
+                    var reviewsScore = $productEl.data('reviews-score') || "0";
+                    
                     items.push({
-                        item_name: $item.find('.product-item-name').text().trim(),
-                        item_id: $item.find('.product-item-sku').text().replace('Varenummer:', '').trim(),
-                        price: parseFloat($item.find('.price').text().replace(/[^\d,\.]/g, '').replace(',', '.')) / 
-                               (parseInt($item.find('.qty').val()) || 1),
-                        quantity: parseInt($item.find('.qty').val()) || 1
+                        item_name: itemName,
+                        affiliation: affiliation,
+                        item_id: itemId,
+                        price: price,
+                        item_brand: itemBrand,
+                        item_category: category,
+                        item_category2: category2,
+                        item_list_name: listName,
+                        item_list_id: listId,
+                        quantity: quantity,
+                        item_stock_status: stockStatus,
+                        item_sale_product: saleProduct,
+                        item_reviews_count: reviewsCount,
+                        item_reviews_score: reviewsScore
                     });
                 });
                 
                 var paymentMethod = $('input[name="payment[method]"]:checked').data('method') || '';
+                var paymentMethodText = $('input[name="payment[method]"]:checked').closest('.payment-method').find('.payment-method-title').text().trim() || 
+                                       'Faktura - Kun for erhvervskunder (Kredit forudsat positiv kreditvurdering)';
                 
-                window.dataLayer = window.dataLayer || [];
-                dataLayer.push({
+                // Create payment data object
+                var paymentData = {
                     event: "add_payment_info",
                     ecommerce: {
                         currency: currency,
                         value: orderTotal,
                         items: items,
-                        payment_type: paymentMethod
+                        payment_type: paymentMethodText
                     }
-                });
+                };
+                /*
+                // Log payment tracking information as a table
+                console.group('Payment Tracking Information');
+                console.log('Event: add_payment_info');
+                console.log('Currency: ' + currency);
+                console.log('Total Value: ' + orderTotal);
+                console.log('Payment Method: ' + paymentMethodText);
+                
+                // Log items table
+                console.log('Items:');
+                console.table(items);
+                
+                // Log the full data structure
+                console.log('Full payment data:');
+                console.log(paymentData);
+                console.groupEnd();
+                */
+                // Push data to dataLayer
+                window.dataLayer = window.dataLayer || [];
+                dataLayer.push(paymentData);
             });
         }
     );
