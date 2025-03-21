@@ -1,11 +1,23 @@
 define([
     'Swissup_Firecheckout/js/utils/move',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (move,$) {
+    'Magento_Ui/js/lib/view/utils/async',
+    'Swissup_Firecheckout/js/utils/form-field/validator',
+    'mage/translate'], function (move,$,validator,$t) {
     'use strict';
 
     // Move checkout fields to the desired position
     move('.swissup-checkout-fields').after('.fc-order-summary-copy .table-totals', 0);
+
+    // (Any custom validator should start from `fc-custom-rule` prefix)
+    validator('[name="street[0]"]', {
+        'lazy': true, // run first validation on `blur` event instead of default instant validation
+        'fc-custom-rule-address': {
+            handler: function (value) {
+                return new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z]).*$/).test(value);
+            },
+            message: $t('Please enter both letters and numbers in the street address.')
+        }
+    });
 
     // DataLayer for email tracking
     $.async('#customer-email', $('#checkout').get(0),
