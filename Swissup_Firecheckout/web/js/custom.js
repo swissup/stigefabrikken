@@ -223,7 +223,7 @@ define([
     $.async('.billing-address-form', $('#checkout').get(0),
         function (billingAddressForm) {
             if ($(billingAddressForm).length && !$(billingAddressForm).prev('.step-title[data-role="title"]').length) {
-                var titleElement = $('<div/>', {
+                var titleElement = $('<div></div>', {
                     'class': 'step-title',
                     'data-bind': 'i18n: \'Billing Address\'',
                     'data-role': 'title',
