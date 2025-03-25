@@ -2,12 +2,34 @@ define([
     'Swissup_Firecheckout/js/utils/move',
     'Magento_Ui/js/lib/view/utils/async',
     'Swissup_Firecheckout/js/utils/form-field/validator',
-    'mage/translate'], function (move,$,validator,$t) {
+    'Swissup_Firecheckout/js/utils/form-field/manager',
+    'mage/translate'], function (move,$,validator,manager,$t) {
     'use strict';
 
     // Move checkout fields to the desired position
     move('.swissup-checkout-fields').after('.fc-order-summary-copy .table-totals', 0);
 
+    // `Street Address: Line 1` - rename to `Street Address`
+    manager('[name="street[0]"]', {
+        label: $t('Street Address'),
+        placeholder: $t('Street Address'),
+    });
+        
+    // rename multiple Street Address fields
+    var streetFields = {
+       '[name="street[0]"]': 'Street Address' 
+    //    '[name="street[1]"]': 'Street Address 2',
+    //    '[name="street[2]"]': 'Street Address 3'
+    };
+  
+    for (var key in streetFields) {         
+        manager(key, {
+            label: $t(streetFields[key]),
+            placeholder: $t(streetFields[key]),
+        });
+    }  
+    
+    
     // (Any custom validator should start from `fc-custom-rule` prefix)
     validator('[name="street[0]"]', {
         'lazy': true, // run first validation on `blur` event instead of default instant validation
@@ -194,6 +216,23 @@ define([
                 window.dataLayer = window.dataLayer || [];
                 dataLayer.push(paymentData);
             });
+        }
+    );
+
+    // Add billing address title
+    $.async('.billing-address-form', $('#checkout').get(0),
+        function (billingAddressForm) {
+            if ($(billingAddressForm).length && !$(billingAddressForm).prev('.step-title[data-role="title"]').length) {
+                var titleElement = $('<div/>', {
+                    'class': 'step-title',
+                    'data-bind': 'i18n: \'Billing Address\'',
+                    'data-role': 'title',
+                    'data-translate': '[{"shown":"Faktureringsadresse","translated":"Faktureringsadresse","original":"Billing Address","location":"Text"}]',
+                    'text': 'Faktureringsadresse'
+                });
+                
+                $(titleElement).insertBefore(billingAddressForm);
+            }
         }
     );
 });
