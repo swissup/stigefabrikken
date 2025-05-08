@@ -1097,12 +1097,19 @@ a, a:hover { color: @red-color; }
     flex-direction: column;
 
     .product.attribute.overview {
-    	order: 1;
+    	order: 5 !important;
 		margin: 5px 0;
     }
+	&>div.prolabels-content-wrapper {
+		order: 0;
+	}
+
+	div:has(> .cc-product) {
+		order: 2;
+	  }
 
     .cc-product {
-    	order: 2;
+		order: 2;	
     }
 
 	.brand-logo {
