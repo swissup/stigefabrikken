@@ -1,0 +1,138 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Custom Form Base for Magento 2
+ */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Amasty\Customform\Block\Init $block
+ * @var \Amasty\Customform\ViewModel\Form\FormInitInterface $viewModel
+ */
+use Amasty\Customform\Model\Config\GdprCustomform;
+
+$viewModel = $block->getViewModel();
+$formId = $viewModel->getFormId();
+$isSurvey = $viewModel->isSurvey();
+$usePopup = $viewModel->isPopupUsed();
+?>
+
+<?php if ($usePopup): ?>
+    <div class="amform-parent" data-content-type="html">
+        <div class="amcform-popup-block" data-form-id=<?= (int)$formId ?>>
+            <div class="amcform-popup">
+                <button class="amcform-button -clear -with-icon -close-popup"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Close form')) ?>"
+                        data-amcform-js="close">
+                    <i class="amcform-icon -cross"></i>
+                </button>
+<?php endif; ?>
+
+<form class="rendered-form amform-form <?= /* @noEscape */ ($usePopup) ? 'amform-content' : '' ?> <?= $escaper->escapeHtml($block->getAdditionalClasses()) ?>"
+      id="amform-form-<?= (int) $formId ?>"
+      data-amform-id="<?= (int) $formId ?>"
+      action="<?= $escaper->escapeUrl($viewModel->getFormAction()) ?>"
+      data-mage-init='{"validation": {"ignore" : ".amcform-hidden-field, .amcform-hidden-page, :hidden:not(.amform-rating)"}}'
+      enctype="multipart/form-data" method="post">
+
+    <input name="form_key" type="hidden" value="<?= $escaper->escapeHtml($viewModel->getFormKey()) ?>" />
+    <input name="form_id" type="hidden" value="<?= (int)$formId ?>" />
+    <input name="is_survey" type="hidden" value="<?= (int)$isSurvey ?>" />
+    <div class="amform-form-fieldset fieldset">
+        <div class="insert-container fields"></div>
+        <?php if ($viewModel->isGDPREnabled()): ?>
+            <div class="field required amform-hide-formload control amcform-gdpr" data-amcform-js="gdpr" style="display: none">
+                <label class="label">
+                    <input class="amform-checkbox"
+                           type="checkbox"
+                           name="gdpr"
+                           data-id="amcustom-form-gdpr-<?= (int) $formId ?>"
+                           id="amcustom-form-gdpr-<?= (int) $formId ?>"
+                           title="<?= $escaper->escapeHtml(__('GDPR')); ?>"
+                           data-validate="{required:true}"
+                           value="1"
+                           disabled>
+                    <?= /* @noEscape */ $viewModel->getGDPRText(); ?>
+                </label>
+            </div>
+        <?php endif; ?>
+        <?php $gdprCheckboxesHtml = $viewModel->getGdprCheckboxHtml($formId . GdprCustomform::CUSTOM_FORM); ?>
+        <?php if (!empty($gdprCheckboxesHtml)): ?>
+            <?= /** @noEscape */ $gdprCheckboxesHtml ?>
+        <?php endif; ?>
+    </div>
+</form>
+
+<?php if ($usePopup): ?>
+        </div>
+    </div>
+        <button data-amform-show="<?= (int)$formId ?>" class="amform-show-popup amcform-button -default">
+            <?= $escaper->escapeHtml($viewModel->getPopupButtonTitle()) ?>
+        </button>
+    </div>
+<?php endif; ?>
+
+<script>
+    require([
+        'jquery',
+        'Amasty_Customform/js/google-map-loader',
+        'Amasty_Customform/js/form-render',
+        '<?= $escaper->escapeHtml($viewModel->getFormFillerComponent()) ?>',
+        'Amasty_Customform/js/am-google-map',
+        'Amasty_Customform/js/form-init'
+    ], function ($, googleMapLoader) {
+        function renderForm () {
+            var renderedFormContainer = $('#amform-form-<?= (int)$formId ?> .insert-container'),
+                renderedForm;
+
+            $('body').addClass('amform-body');
+
+            renderedFormContainer.formRender(
+                <?= (int)$formId ?>,
+                <?= /* @noEscape */ $block->getFormDataJson() ?>,
+                <?= (int)$isSurvey ?>,
+                function () {
+                    renderedForm = $('[data-amcform-js="multi-page"]');
+
+                    if (renderedForm.length) {
+                        renderedForm.amFormInit();
+                        renderedForm.amFormFill({
+                            'formParams' : <?= /** @noEscape */ $viewModel->getFormParamsJson() ?>
+                        });
+                        renderedForm.trigger('contentUpdated');
+                    }
+
+                    $(document).on('amcform-init-multipage', function (e, form) {
+                        var $form = form.find('[data-amcform-js="multi-page"]');
+
+                        if ($form.length) {
+                            $form.amFormFill({
+                                'formParams' : <?= /** @noEscape */ $viewModel->getFormParamsJson() ?>
+                            });
+                        }
+                    });
+                }
+            );
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            'event': 'customEvent',
+                            'formId': this.id,
+                            'formData': Object.fromEntries(new FormData(this))
+                        });
+
+                });
+            });
+        }
+
+        <?php if ($viewModel->isUseGoogleMap()): ?>
+            var deferredObject = googleMapLoader('<?= $escaper->escapeHtml($viewModel->getGoogleKey()) ?>');
+
+            deferredObject.always(renderForm);
+        <?php else: ?>
+            renderForm();
+        <?php endif; ?>
+    });
+</script>
