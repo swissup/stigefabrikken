@@ -2,7 +2,7 @@
 
 Add following to repositories list on server and pull the files:
 
-```json
+```bash
 cd <magento_root>
 composer config repositories.theme-swissup-stigfabrikken vcs git@github.com:swissup/stigefabrikken.git
 composer require swissup/stigefabrikken --no-dev
